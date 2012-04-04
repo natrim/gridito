@@ -33,7 +33,7 @@ class Column extends \Nette\Application\UI\Control
 	private $editable = false;
 
 	/** @var string */
-	private $dateTimeFormat = "j.n.Y G:i";
+	private $dateTimeFormat = 'j.n.Y G:i';
 
 	/** @var string|callable */
 	private $cellClass = null;
@@ -268,7 +268,7 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public static function renderBoolean($value)
 	{
-		$icon = $value ? "check" : "closethick";
+		$icon = $value ? 'check' : 'closethick';
         $el = Html::el('span');
         $el->data['value'] = $value ? '1' : '0';
         $el->data['type']  = 'bool';
@@ -371,7 +371,7 @@ class Column extends \Nette\Application\UI\Control
 	 * @param mixed record
 	 */
 	public function renderCell($record) {
-		$column = call_user_func($this->renderer ?: array($this, "defaultCellRenderer"), $record, $this);
+		$column = call_user_func($this->renderer ?: array($this, 'defaultCellRenderer'), $record, $this);
         if (!($column instanceOf Html)) {
             $column = Html::el('span')->setText($column);
         }
