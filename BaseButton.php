@@ -150,7 +150,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	 * @param mixed row
 	 * @return string
 	 */
-	protected function getLink($row = null)
+	public function getLink($row = null)
 	{
 		// custom link
 		if (isset($this->link)) {
@@ -261,7 +261,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	 * @param mixed row
 	 * @return Nette\Web\Html
 	 */
-	protected function createButton($row = null)
+	public function createButton($row = null)
 	{
         $button = Html::el('a');
         if ($this->isEnabled($row)) {
