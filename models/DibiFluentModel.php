@@ -68,4 +68,9 @@ class DibiFluentModel extends AbstractModel
 		return $this->fluent->count();
 	}
 
+
+	public function getItemValue($item, $valueName)
+	{
+		return $item->$valueName;
+	}
 }

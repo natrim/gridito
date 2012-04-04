@@ -124,4 +124,8 @@ abstract class AbstractModel implements IModel
 		return $this->count;
 	}
 
+	public function getItemValue($item, $valueName)
+	{
+		return $item->$valueName;
+	}
 }

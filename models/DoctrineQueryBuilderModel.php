@@ -4,6 +4,7 @@ namespace Gridito;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Nette\ObjectMixin;
 
 /**
  * Doctrine QueryBuilder model
@@ -13,9 +14,12 @@ use Doctrine\ORM\QueryBuilder;
  */
 class DoctrineQueryBuilderModel extends AbstractModel
 {
-	/** @var Doctrine\ORM\QueryBuilder */
-	private $qb;
 
+	/** @var \Doctrine\ORM\QueryBuilder */
+	protected $qb;
+
+	/** @var array */
+	protected $columnAliases = array();
 
 	/**
 	 * Construct
@@ -44,7 +48,12 @@ class DoctrineQueryBuilderModel extends AbstractModel
 
 		list($sortColumn, $sortType) = $this->getSorting();
 		if ($sortColumn) {
-			$this->qb->orderBy($this->qb->getRootAlias() . "." . $sortColumn, $sortType);
+			if (isset($this->columnAliases[$sortColumn])) {
+				$sortColumn = $this->columnAliases[$sortColumn]->qbName;
+			} else {
+				$sortColumn = $this->qb->getRootAlias() . '.' . $sortColumn;
+			}
+			$this->qb->orderBy($sortColumn, $sortType);
 		}
 
 		return $this->qb->getQuery()->getResult();
@@ -57,5 +66,42 @@ class DoctrineQueryBuilderModel extends AbstractModel
 		$qb = clone $this->qb;
 		return $qb->andWhere($this->qb->getRootAlias() . "." . $this->getPrimaryKey() . " = " . (int) $uniqueId)->getQuery()->getSingleResult();
 	}
-	
+
+
+
+	public function getItemValue($item, $valueName)
+	{
+		if (isset($this->columnAliases[$valueName])) {
+			$getterPath = $this->columnAliases[$valueName]->getterPath;
+		} else {
+			$getterPath = $valueName;
+		}
+
+		$getters = explode('.', $getterPath);
+
+		$value = $item;
+
+		foreach ($getters as $getter) {
+			$value = ObjectMixin::get($value, $getter);
+		}
+
+		return $value;
+	}
+
+
+	/**
+	 * @param string $columnName column name in gridito
+	 * @param string $getterPath name for getting a value for default renderer (e.g. "image.name" is translated to $entity->getImage()->getName())
+	 * @param string $qbName name for doctrine query builder (used for ordering)
+	 * @return \Gridito\DoctrineQueryBuilderModel
+	 */
+	public function addColumnAliases($columnName, $getterPath, $qbName)
+	{
+		$this->columnAliases[$columnName] = (object) array(
+			'getterPath' => $getterPath,
+			'qbName' => $qbName,
+		);
+
+		return $this;
+	}
 }

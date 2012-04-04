@@ -53,4 +53,8 @@ class NetteModel extends AbstractModel
 		return $this->selection->count('*');
 	}
 
+	public function getItemValue($item, $valueName)
+	{
+		return $item->$valueName;
+	}
 }

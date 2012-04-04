@@ -24,6 +24,12 @@ class Grid extends \Nette\Application\UI\Control
 	/** @var int */
 	private $defaultItemsPerPage = 20;
 
+	/** @var string */
+	public $defaultSortColumn = null;
+
+	/** @var string */
+	public $defaultSortType = null;
+
 	/**
 	 * @var string
 	 * @persistent
@@ -94,6 +100,21 @@ class Grid extends \Nette\Application\UI\Control
 	}
 
 
+	/**
+	* Is column highlighted?
+	* @param Column $column
+	* @return bool
+	*/
+	public function isColumnHighlighted(Column $column)
+	{
+		$sorting = $this->getSorting();
+
+		if (!$this->highlightOrderedColumn || $sorting === NULL) {
+			return FALSE;
+		}
+	
+		return $sorting[0] === $column->getColumnName();
+	}
 
 	public function setRowClass($class)
 	{
@@ -188,7 +209,39 @@ class Grid extends \Nette\Application\UI\Control
 		return $this;
 	}
 
+	/**
+	* Set default sorting
+	* @param string $column column name for model
+	* @param string $type asc or desc
+	* @return Grid
+	*/
+	public function setDefaultSorting($column, $type)
+	{
+		$this->defaultSortColumn = $column;
+		$this->defaultSortType = $type;
+		return $this;
+	}
 
+	/**
+	* Get sorting options
+	* @return array|null array with sorting column for model and asc or desc
+	*/
+	public function getSorting()
+	{
+		$columns = $this['columns'];
+		/* @var $columns \Nette\ComponentModel\IContainer */
+
+	    $sortByColumn = $this->sortColumn ? $columns->getComponent($this->sortColumn) : NULL;
+		/* @var $sortByColumn \Gridito\Column */
+
+		if ($sortByColumn && $sortByColumn->isSortable() && ($this->sortType === IModel::ASC || $this->sortType === IModel::DESC)) {
+			return array($sortByColumn->getColumnName(), $this->sortType);
+		} elseif ($this->defaultSortColumn) {
+			return array($this->defaultSortColumn, $this->defaultSortType);
+		} else {
+			return NULL;
+		}
+	}
 
 	/**
 	 * Get paginator
@@ -285,7 +338,7 @@ class Grid extends \Nette\Application\UI\Control
 	 */
 	protected function createTemplate($class = null)
 	{
-		return parent::createTemplate()->setFile(__DIR__ . "/templates/grid.phtml");
+		return parent::createTemplate($class)->setFile(__DIR__ . "/templates/grid.phtml");
 	}
 
 
@@ -299,7 +352,10 @@ class Grid extends \Nette\Application\UI\Control
 		$this->model->setOffset($this->paginator->getOffset());
 
 		if ($this->sortColumn && $this["columns"]->getComponent($this->sortColumn)->isSortable()) {
-			$this->model->setSorting($this->sortColumn, $this->sortType);
+			$sortByColumn = $this['columns']->getComponent($this->sortColumn);
+			$this->model->setSorting($sortByColumn->getColumnName(), $this->sortType);
+		} elseif ($this->defaultSortColumn) {
+			$this->model->setSorting($this->defaultSortColumn, $this->defaultSortType);
 		}
         $this['visualPaginator']->setClass(array('paginator', $this->ajaxClass));
 
@@ -317,7 +373,10 @@ class Grid extends \Nette\Application\UI\Control
 	 */
 	public function addColumn($name, $label = null, array $options = array())
 	{
-		$column = new Column($this["columns"], $name);
+		$componentName = \Nette\Utils\Strings::webalize($name);
+		$componentName = strtr($componentName, '-', '_');
+		$column = new Column($this['columns'], $componentName);
+		$column->setColumnName($name);
 		$column->setLabel($label);
 		$this->setOptions($column, $options);
 		return $column;

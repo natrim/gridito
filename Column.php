@@ -43,6 +43,9 @@ class Column extends \Nette\Application\UI\Control
 
     /** @var string */
     public $spamProtection = null;
+    
+    /** @var string */
+   	private $columnName;
 
 	// </editor-fold>
 
@@ -220,12 +223,15 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public function getSorting()
 	{
-		$grid = $this->getGrid();
-		if ($grid->sortColumn === $this->getName()) {
-			return $grid->sortType;
-		} else {
-			return null;
+		$sorting = $this->getGrid()->getSorting();
+		
+		if ($sorting === NULL) {
+			return NULL;
 		}
+		
+		list($column, $type) = $sorting;
+		
+		return $column === $this->columnName ? $type: NULL;
 	}
 
 
@@ -341,7 +347,7 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public function defaultCellRenderer($record, $column) {
 		$name = $column->getName();
-		$value = $record->$name;
+		$value = $this->getGrid()->getModel()->getItemValue($record, $this->columnName);
 
 		// boolean
 		if (in_array($this->type, array('bool', 'boolean')) || is_bool($value)) {
@@ -385,6 +391,24 @@ class Column extends \Nette\Application\UI\Control
             $column->data['id'] = $this->getGrid()->getModel()->getUniqueId($record);
         }
         echo $column;
+	}
+
+	/**
+   	* @param string $columnName
+	*/
+	public function setColumnName($columnName)
+	{
+		$this->columnName = $columnName;
+	}
+
+
+
+	/**
+	* @return string
+	*/
+	public function getColumnName()
+	{
+   		return $this->columnName;
 	}
 
 }
