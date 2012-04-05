@@ -63,13 +63,15 @@ class Grid extends \Nette\Application\UI\Control
     {
         parent::__construct();
 
+        $this->session = $session;
+        $this->request = $request;
+
+        $paginator->setPaginator(new \VisualPaginator\Paginator);
+
         $this->addComponent(new Container, 'toolbar');
         $this->addComponent(new Container, 'actions');
         $this->addComponent(new Container, 'columns');
-        $this->addComponent($paginator->createPaginator(), 'visualPaginator');
-
-        $this->session = $session;
-        $this->request = $request;
+        $this->addComponent($paginator, 'visualPaginator');
 
         $this['visualPaginator']->onChange[] = callback($this, 'invalidateControl');
 
