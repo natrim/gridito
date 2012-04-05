@@ -38,13 +38,17 @@
 							<thead>
 							<tr>
 								{block tableheader}
-									{var $nextSort = array('null' => 'asc', 'asc' => 'desc', 'desc' => 'null')}
+									{var $nextSort = array(null => 'asc', 'asc' => 'desc', 'desc' => null)}
 									<th n:foreach="$control['columns']->getComponents() as $column">
 										{block tableheadercontent}
-											{var $next = $nextSort[$column->sorting]}
-											<a n:tag-if="$column->isSortable()" n:href="sort!, $column->name, $next" n:class="$control->ajaxClass, $next">
-                                {$column->label}<span class="sorting"></span>
-                            </a>
+											{if $column->isSortable()}
+												{var $next = $nextSort[$column->sorting]}
+												<a n:href="sort!, $column->columnName, $next" n:class="$control->ajaxClass, $next">
+                                					{$column->label}<span class="sorting"></span>
+                            					</a>
+											{else}
+												{$column->label}
+											{/if}
 										{/block}
 									</th>
 									<th n:if="$control->hasActions()"></th>

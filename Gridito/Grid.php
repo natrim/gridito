@@ -241,7 +241,7 @@ class Grid extends \Nette\Application\UI\Control
         $sortByColumn = $this->sortColumn ? $columns->getComponent($this->sortColumn) : NULL;
         /* @var $sortByColumn \Gridito\Column */
 
-        if ($sortByColumn && $sortByColumn->isSortable() && ($this->sortType === IModel::ASC || $this->sortType === IModel::DESC)) {
+        if ($sortByColumn && $sortByColumn->isSortable() && ($this->sortType === Model\IModel::ASC || $this->sortType === Model\IModel::DESC)) {
             return array($sortByColumn->getColumnName(), $this->sortType);
         } elseif ($this->defaultSortColumn) {
             return array($this->defaultSortColumn, $this->defaultSortType);
@@ -315,9 +315,7 @@ class Grid extends \Nette\Application\UI\Control
         if ($this->presenter->isAjax()) {
             $post = $this->request->getPost();
             foreach ($post as $column => $value) {
-                if ($column == 'id' ||
-                    $this['columns']->getComponent($column)->isEditable()
-                ) {
+                if ($column === $this->getModel()->getPrimaryKey() || $this['columns']->getComponent($column)->isEditable()) {
                     continue;
                 }
                 throw new \Nette\Application\ForbiddenRequestException('Column \'' . $column . '\' is not editable');
@@ -355,14 +353,14 @@ class Grid extends \Nette\Application\UI\Control
      */
     public function render()
     {
-        $this->model->setLimit($this->paginator->getLength());
-        $this->model->setOffset($this->paginator->getOffset());
+        $this->getModel()->setLimit($this->paginator->getLength());
+        $this->getModel()->setOffset($this->paginator->getOffset());
 
         if ($this->sortColumn && $this['columns']->getComponent($this->sortColumn)->isSortable()) {
             $sortByColumn = $this['columns']->getComponent($this->sortColumn);
-            $this->model->setSorting($sortByColumn->getColumnName(), $this->sortType);
+            $this->getModel()->setSorting($sortByColumn->getColumnName(), $this->sortType);
         } elseif ($this->defaultSortColumn) {
-            $this->model->setSorting($this->defaultSortColumn, $this->defaultSortType);
+            $this->getModel()->setSorting($this->defaultSortColumn, $this->defaultSortType);
         }
         $this['visualPaginator']->setClass(array('paginator', $this->ajaxClass));
 
