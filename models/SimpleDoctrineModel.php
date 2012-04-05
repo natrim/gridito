@@ -1,6 +1,6 @@
 <?php
 
-namespace Gridito;
+namespace Gridito\Models;
 
 use Doctrine\ORM\EntityManager;
 
@@ -11,9 +11,13 @@ use Doctrine\ORM\EntityManager;
  */
 class SimpleDoctrineModel extends DoctrineQueryBuilderModel
 {
-	public function __construct(EntityManager $em, $entityName)
-	{
-		parent::__construct($em->getRepository($entityName)->createQueryBuilder("e"));
-		$this->setPrimaryKey($em->getClassMetadata($entityName)->getSingleIdentifierFieldName());
-	}
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param $entityName
+     */
+    public function __construct(EntityManager $em, $entityName)
+    {
+        parent::__construct($em->getRepository($entityName)->createQueryBuilder('e'));
+        $this->setPrimaryKey($em->getClassMetadata($entityName)->getSingleIdentifierFieldName());
+    }
 }

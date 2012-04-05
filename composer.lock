@@ -1,0 +1,15 @@
+{
+    "hash": "e0f694e67c741d152de82022b54f14a2",
+    "packages": [
+        {
+            "package": "natrim/VisualPaginator",
+            "version": "dev-master",
+            "source-reference": "f8ad1cfbea608482a728311b8c9abcd9ed8dda78"
+        },
+        {
+            "package": "nette/nette",
+            "version": "v2.0.3"
+        }
+    ],
+    "aliases": []
+}

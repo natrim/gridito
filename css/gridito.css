@@ -1,0 +1,91 @@
+/**
+ * Gridito CSS
+ */
+
+/* flashes */
+div.gridito-flash {
+    padding: 0.5em;
+    margin: 1em 0;
+}
+
+div.gridito-flash .ui-icon, div.gridito-flash .gridito-table th .gridito-sorting .sorting-no, .gridito-table th .gridito-sorting div.gridito-flash .sorting-no, div.gridito-flash .gridito-table th .gridito-sorting .sorting-asc, .gridito-table th .gridito-sorting div.gridito-flash .sorting-asc, div.gridito-flash .gridito-table th .gridito-sorting .sorting-desc, .gridito-table th .gridito-sorting div.gridito-flash .sorting-desc, div.gridito-flash span.gridito-icon {
+    float: left;
+    margin-right: 0.5em;
+}
+
+/* toolbar */
+.gridito-toolbar {
+    margin-bottom: 1em;
+}
+
+.gridito-toolbar .ui-button, .gridito-toolbar .gridito-button {
+    margin-right: 0.5em;
+}
+
+/* table */
+.gridito-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.gridito-table th {
+    padding: 0.5em;
+    text-align: left;
+}
+
+.gridito-table th .gridito-sorting {
+    float: right;
+    margin-left: 0.5em;
+    position: relative;
+    top: 0.2em;
+}
+
+.gridito-table th .gridito-sorting .sorting-no {
+    opacity: 0.5;
+}
+
+.gridito-table th .gridito-sorting .sorting-no:hover {
+    opacity: 1;
+}
+
+.gridito-table th:hover .gridito-sorting .sorting-no {
+    opacity: 1;
+}
+
+.gridito-table td {
+    padding: 0.5em;
+    border: 1px solid #BBB;
+}
+
+.gridito-table tr {
+    max-height: 2ex;
+}
+
+span.editable {
+    width: 100%;
+    min-height: 30px;
+    line-height: 30px;
+    margin: 0px;
+    display: block;
+}
+
+.gridito-table .ui-state-hover .gridito-cell, .gridito-table tbody tr:hover .gridito-cell, .gridito-table .gridito-button:hover .gridito-cell {
+    font-weight: normal;
+}
+
+.gridito-actioncell .ui-button, .gridito-actioncell .gridito-button {
+    margin: 0 0.5em 0 0;
+}
+
+.gridito-actioncell .ui-button:first-child, .gridito-actioncell .gridito-button:first-child {
+    margin-left: 0;
+}
+
+.gridito-actioncell {
+    text-align: center;
+}
+
+/* paginator */
+.gridito-paginator {
+    margin-top: 1em;
+}

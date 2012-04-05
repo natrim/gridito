@@ -1,6 +1,6 @@
 <?php
 
-namespace Gridito;
+namespace Gridito\Models;
 
 /**
  * Data model
@@ -10,23 +10,23 @@ namespace Gridito;
  */
 interface IModel extends \Countable
 {
-	const ASC = "asc";
-	const DESC = "desc";
+    const ASC = 'asc';
+    const DESC = 'desc';
 
-	public function getUniqueId($item);
-	
-	public function getItemByUniqueId($uniqueId);
+    public function getUniqueId($item);
 
-	public function getItemsByUniqueIds(array $uniqueIds);
-	
-	public function getItems();
+    public function getItemByUniqueId($uniqueId);
 
-	public function setSorting($column, $type);
+    public function getItemsByUniqueIds(array $uniqueIds);
 
-	public function setLimit($limit);
+    public function getItems();
 
-	public function setOffset($offset);
-	
-	public function getItemValue($item, $valueName);
+    public function setSorting($column, $type);
+
+    public function setLimit($limit);
+
+    public function setOffset($offset);
+
+    public function getItemValue($item, $valueName);
 
 }

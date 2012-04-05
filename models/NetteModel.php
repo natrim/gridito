@@ -1,6 +1,6 @@
 <?php
 
-namespace Gridito;
+namespace Gridito\Models;
 
 use Nette\Database\Table\Selection;
 
@@ -12,49 +12,61 @@ use Nette\Database\Table\Selection;
  */
 class NetteModel extends AbstractModel
 {
-    /** @var Nette\Database\Table\Selection */
+    /** @var \Nette\Database\Table\Selection */
     private $selection;
 
-	/**
-	 * Constructor
-	 * @param Selection $selection
-	 */
-	public function __construct(Selection $selection)
-	{
+    /**
+     * Constructor
+     * @param Selection $selection
+     */
+    public function __construct(Selection $selection)
+    {
         $this->selection = $selection;
-	}
+    }
 
-	public function getItemByUniqueId($uniqueId)
-	{
+    /**
+     * @param $uniqueId
+     * @return \Nette\Database\Table\ActiveRow
+     */
+    public function getItemByUniqueId($uniqueId)
+    {
         $select = clone $this->selection;
         return $select->where($this->getPrimaryKey(), $uniqueId)
             ->fetch();
-	}
+    }
 
-	public function getItems()
-	{
+    /**
+     * @return array
+     */
+    public function getItems()
+    {
         $select = clone $this->selection;
 
-		list($sortColumn, $sortType) = $this->getSorting();
-		if ($sortColumn) {
+        list($sortColumn, $sortType) = $this->getSorting();
+        if ($sortColumn) {
             $select->order("$sortColumn $sortType");
-		}
+        }
         return $select->limit($this->getLimit(), $this->getOffset())
             ->fetchPairs($this->getPrimaryKey());
-	}
+    }
 
 
-	/**
-	 * Item count
-	 * @return int
-	 */
-	protected function _count()
-	{
-		return $this->selection->count('*');
-	}
+    /**
+     * Item count
+     * @return int
+     */
+    protected function _count()
+    {
+        return $this->selection->count('*');
+    }
 
-	public function getItemValue($item, $valueName)
-	{
-		return $item->$valueName;
-	}
+    /**
+     * @param $item
+     * @param $valueName
+     * @return mixed
+     */
+    public function getItemValue($item, $valueName)
+    {
+        return $item->$valueName;
+    }
 }

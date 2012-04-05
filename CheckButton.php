@@ -28,14 +28,14 @@ class CheckButton extends BaseButton
     }
 
 
-	/**
-	 * Is button checked
-	 * @param mixed row
-	 * @return bool
+    /**
+     * Is button checked
+     * @param mixed row
+     * @return bool
      */
     public function isChecked($row = null)
     {
-		return is_bool($this->checked) ? $this->checked : call_user_func($this->checked, $row);
+        return is_bool($this->checked) ? $this->checked : call_user_func($this->checked, $row);
     }
 
 
@@ -49,7 +49,6 @@ class CheckButton extends BaseButton
     }
 
 
-
     /**
      * Set ajax mode
      * @param bool ajax
@@ -57,10 +56,9 @@ class CheckButton extends BaseButton
      */
     public function setAjax($ajax)
     {
-        $this->ajax = (bool) $ajax;
+        $this->ajax = (bool)$ajax;
         return $this;
     }
-
 
 
     /**
@@ -75,10 +73,9 @@ class CheckButton extends BaseButton
         if ($this->getPresenter()->isAjax()) {
             $this->getGrid()->invalidateControl();
         } else {
-            $this->getGrid()->redirect("this");
+            $this->getGrid()->redirect('this');
         }
     }
-
 
 
     /**

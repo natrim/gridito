@@ -1,80 +1,80 @@
 {snippet}
 <div class="gridito">
-    {if isset($windowOutput)}
+	{if isset($windowOutput)}
 
-        {* window (non javascript fallback) *}
-        {block window}
-        <h2>{$windowLabel}</h2>
-        {!$windowOutput}
-        {/block}
+	{* window (non javascript fallback) *}
+		{block window}
+			<h2>{$windowLabel}</h2>
+			{!$windowOutput}
+		{/block}
 
-    {else}
+		{else}
 
-        {block grid}
+		{block grid}
 
-        {* flash messages *}
-        {snippet flashes}
-        <div n:class="gridito-flash, $flash->type" n:foreach="$flashes as $flash">
-            <span n:class="gridito-icon"></span>
-            {$flash->message}
-        </div>
-        {/snippet}
+		{* flash messages *}
+			{snippet flashes}
+				<div n:class="gridito-flash, $flash->type" n:foreach="$flashes as $flash">
+					<span n:class="gridito-icon"></span>
+					{$flash->message}
+				</div>
+			{/snippet}
 
-        {* top toolbar *}
-        {block toptoolbar}
-        <div class="gridito-toolbar" n:if="$control->hasToolbar()" n:inner-foreach="$control['toolbar']->getComponents() as $button">
-            {control $button}
-        </div>
-        {/block}
+		{* top toolbar *}
+			{block toptoolbar}
+				<div class="gridito-toolbar" n:if="$control->hasToolbar()" n:inner-foreach="$control['toolbar']->getComponents() as $button">
+					{control $button}
+				</div>
+			{/block}
 
-        {* table or empty message *}
-        {block data}
+		{* table or empty message *}
+			{block data}
 
-        {if $control->getModel()->count() > 0}
+				{if $control->getModel()->count() > 0}
 
-            {* grid table *}
-            {block table}
-            <table class="gridito-table">
-                <thead>
-                    <tr>
-                        {block tableheader}
-                        {var $nextSort = array('null' => 'asc', 'asc' => 'desc', 'desc' => 'null')}
-                        <th n:foreach="$control['columns']->getComponents() as $column">
-                            {block tableheadercontent}
-                            {var $next = $nextSort[$column->sorting]}
-                            <a n:tag-if="$column->isSortable()" n:href="sort!, $column->name, $next" n:class="$control->ajaxClass, $next">
+				{* grid table *}
+					{block table}
+						<table class="gridito-table">
+							<thead>
+							<tr>
+								{block tableheader}
+									{var $nextSort = array('null' => 'asc', 'asc' => 'desc', 'desc' => 'null')}
+									<th n:foreach="$control['columns']->getComponents() as $column">
+										{block tableheadercontent}
+											{var $next = $nextSort[$column->sorting]}
+											<a n:tag-if="$column->isSortable()" n:href="sort!, $column->name, $next" n:class="$control->ajaxClass, $next">
                                 {$column->label}<span class="sorting"></span>
                             </a>
-                            {/block}
-                        </th>
-                        <th n:if="$control->hasActions()"></th>
-                        {/block}
-                    </tr>
-                </thead>
-                <tbody>
-                    {block tablebody}
-                    <tr n:foreach="$control->getModel()->getItems() as $item" n:class="$control->getRowClass($iterator, $item)">
-                        <td n:class="gridito-cell, $column->getCellClass($iterator, item), $control->isColumnHighlighted($column) ? highlight" n:foreach="$control['columns']->getComponents() as $column">
-                            {control $column:cell $item}
-                        </td>
-                        <td class="gridito-actioncell" n:if="$control->hasActions()" n:inner-foreach="$control['actions']->getComponents() as $button">
-                            {control $button $item}
-                        </td>
-                    </tr>
-                    {/block}
-                </tbody>
-            </table>
-            {/block}
+										{/block}
+									</th>
+									<th n:if="$control->hasActions()"></th>
+								{/block}
+							</tr>
+							</thead>
+							<tbody>
+								{block tablebody}
+								<tr n:foreach="$control->getModel()->getItems() as $item" n:class="$control->getRowClass($iterator, $item)">
+									<td n:class="gridito-cell, $column->getCellClass($iterator, item), $control->isColumnHighlighted($column) ? highlight" n:foreach="$control['columns']->getComponents() as $column">
+										{control $column:cell $item}
+									</td>
+									<td class="gridito-actioncell" n:if="$control->hasActions()" n:inner-foreach="$control['actions']->getComponents() as $button">
+										{control $button $item}
+									</td>
+								</tr>
+								{/block}
+							</tbody>
+						</table>
+					{/block}
 
-        {else}
-            {block emptyResult}{/block}
-        {/if}
+					{else}
+					{block emptyResult}{/block}
+				{/if}
 
-        {/block}
+			{/block}
 
-        {control visualPaginator}
+			{control visualPaginator}
 
-        {/block}
-    {/if}
+		{/block}
+	{/if}
 </div>
 {/snippet}
