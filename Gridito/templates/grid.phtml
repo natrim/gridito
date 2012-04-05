@@ -43,7 +43,7 @@
 										{block tableheadercontent}
 											{if $column->isSortable()}
 												{var $next = $nextSort[$column->sorting]}
-												<a n:href="sort!, $column->columnName, $next" n:class="$control->ajaxClass, $next">
+												<a n:href="sort!, $column->name, $next" n:class="$control->ajaxClass, $next">
                                 					{$column->label}<span class="sorting"></span>
                             					</a>
 											{else}
