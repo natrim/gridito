@@ -85,6 +85,10 @@ span.editable {
     text-align: center;
 }
 
+.gridito-hide-text .gridito-text {
+    display: none;
+}
+
 /* paginator */
 .gridito-paginator {
     margin-top: 1em;
