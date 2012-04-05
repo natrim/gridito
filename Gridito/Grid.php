@@ -164,7 +164,7 @@ class Grid extends \Nette\Application\UI\Control
      * @param Model\IModel model
      * @return Grid
      */
-    public function setModel(Models\IModel $model)
+    public function setModel(Model\IModel $model)
     {
         $this->getPaginator()->setItemCount($model->count());
         $this->model = $model;
