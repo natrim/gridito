@@ -1,6 +1,6 @@
 <?php
 
-namespace Gridito\Models;
+namespace Gridito\Model;
 
 use DibiFluent;
 

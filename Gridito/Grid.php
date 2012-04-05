@@ -13,7 +13,7 @@ use Nette\Utils\Strings;
 class Grid extends \Nette\Application\UI\Control
 {
 
-    /** @var Models\IModel */
+    /** @var Model\IModel */
     private $model;
 
     /** @var \Nette\Utils\Paginator */
@@ -147,7 +147,7 @@ class Grid extends \Nette\Application\UI\Control
 
     /**
      * Get model
-     * @return Models\IModel
+     * @return Model\IModel
      */
     public function getModel()
     {
@@ -161,7 +161,7 @@ class Grid extends \Nette\Application\UI\Control
 
     /**
      * Set model
-     * @param Models\IModel model
+     * @param Model\IModel model
      * @return Grid
      */
     public function setModel(Models\IModel $model)

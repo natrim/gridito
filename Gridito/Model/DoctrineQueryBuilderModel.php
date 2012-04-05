@@ -1,6 +1,6 @@
 <?php
 
-namespace Gridito\Models;
+namespace Gridito\Model;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -104,7 +104,7 @@ class DoctrineQueryBuilderModel extends AbstractModel
      * @param string $columnName column name in gridito
      * @param string $getterPath name for getting a value for default renderer (e.g. "image.name" is translated to $entity->getImage()->getName())
      * @param string $qbName name for doctrine query builder (used for ordering)
-     * @return \Gridito\Models\DoctrineQueryBuilderModel
+     * @return \Gridito\Model\DoctrineQueryBuilderModel
      */
     public function addColumnAliases($columnName, $getterPath, $qbName)
     {
