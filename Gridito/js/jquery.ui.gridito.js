@@ -68,7 +68,7 @@ jQuery.extend({
         input.data('span', who);
         input.val(who.attr('data-value'));
         input.addClass('editable');
-        input.blur(function () { jQuery.stopedit($(this)); });
+        input.blur(function () { jQuery.stopedit(jQuery(this)); });
         input.keyup(function (event) {if (event.keyCode == 27) { input.blur(); }}
         );
         who.replaceWith(input);
@@ -77,5 +77,5 @@ jQuery.extend({
 });
 
 jQuery('span.editable').live('click', function (event) {
-    jQuery.startedit($(this));
+    jQuery.startedit(jQuery(this));
 });
