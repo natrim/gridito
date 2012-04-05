@@ -151,6 +151,10 @@ class Grid extends \Nette\Application\UI\Control
      */
     public function getModel()
     {
+        if ($this->model === NULL) {
+            throw new \InvalidArgumentException('The model was not set! Use \'setModel\' to set model first!');
+        }
+
         return $this->model;
     }
 
