@@ -1,23 +1,28 @@
 {
-    "name": "natrim/gridito",
-    "description": "My version of JanMarek datagrid gridito",
-    "config": {
-	"vendor-dir": "libs"
-    },
-    "repositories": [
-	{
-	    "type": "vcs",
-	    "url": "git://github.com/natrim/VisualPaginator.git"
-	}
-    ],
-    "require": {
-        "nette/nette": "2.0.*",
-        "natrim/VisualPaginator": "*"
-    },
-    "authors": [
-        {
-            "name": "Natrim",
-            "email": "maly@kinet.cz"
-        }
-    ]
+	"name": "natrim/gridito",
+	"description": "My version of JanMarek datagrid gridito",
+	"config": {
+		"vendor-dir": "libs"
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git://github.com/natrim/VisualPaginator.git"
+		}
+	],
+	"autoload": {
+		"psr-0": {
+			"Gridito": ""
+		}
+	},
+	"require": {
+		"nette/nette": "2.0.*",
+		"natrim/VisualPaginator": "*"
+	},
+	"authors": [
+		{
+			"name": "Natrim",
+			"email": "maly@kinet.cz"
+		}
+	]
 }
