@@ -344,7 +344,7 @@ class Grid extends \Nette\Application\UI\Control
      */
     protected function createTemplate($class = null)
     {
-        return parent::createTemplate($class)->setFile(__DIR__ . '/templates/grid.phtml');
+        return parent::createTemplate($class)->setFile(__DIR__ . '/../../templates/grid.phtml');
     }
 
 

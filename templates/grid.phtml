@@ -14,8 +14,8 @@
 
 		{* flash messages *}
 			{snippet flashes}
-				<div n:class="gridito-flash, $flash->type" n:foreach="$flashes as $flash">
-					<span n:class="gridito-icon"></span>
+				<div n:class="gridito-flash, $flash->type === 'error' ? 'ui-state-error' : 'ui-state-highlight', ui-corner-all" n:foreach="$flashes as $flash">
+					<span n:class="gridito-icon, ui-icon, $flash->type === 'error' ? 'ui-icon-alert' : 'ui-icon-info'"></span>
 					{$flash->message}
 				</div>
 			{/snippet}
@@ -41,14 +41,12 @@
 									{var $nextSort = array(null => 'asc', 'asc' => 'desc', 'desc' => null)}
 									<th n:foreach="$control['columns']->getComponents() as $column">
 										{block tableheadercontent}
-											{if $column->isSortable()}
-												{var $next = $nextSort[$column->sorting]}
-												<a n:href="sort!, $column->name, $next" n:class="$control->ajaxClass, $next">
-                                					{$column->label}<span class="sorting"></span>
-                            					</a>
-											{else}
-												{$column->label}
-											{/if}
+											<span class="gridito-sorting" n:if="$column->isSortable()">
+												<a n:if="$column->getSorting() === null" n:href="sort!, $column->getName(), asc" n:class="$control->getAjaxClass()"><span class="sorting-no"></span></a>
+												<a n:if="$column->sorting === 'asc'" n:href="sort!, $column->getName(), desc" n:class="$control->getAjaxClass()"><span class="sorting-asc"></span></a>
+												<a n:if="$column->sorting === 'desc'" n:href="sort!, null, null" n:class="$control->getAjaxClass()"><span class="sorting-desc"></span></a>
+											</span>
+											{$column->getLabel()}
 										{/block}
 									</th>
 									<th n:if="$control->hasActions()"></th>
@@ -58,7 +56,7 @@
 							<tbody>
 								{block tablebody}
 								<tr n:foreach="$control->getModel()->getItems() as $item" n:class="$control->getRowClass($iterator, $item)">
-									<td n:class="gridito-cell, $column->getCellClass($iterator, item), $control->isColumnHighlighted($column) ? highlight" n:foreach="$control['columns']->getComponents() as $column">
+									<td n:class="gridito-cell, $column->getCellClass($iterator, item), $control->isColumnHighlighted($column) ? ui-state-highlight" n:foreach="$control['columns']->getComponents() as $column">
 										{control $column:cell $item}
 									</td>
 									<td class="gridito-actioncell" n:if="$control->hasActions()" n:inner-foreach="$control['actions']->getComponents() as $button">
