@@ -7,7 +7,7 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "git://github.com/natrim/VisualPaginator.git"
+			"url": "git://github.com/natrim/visualpaginator.git"
 		}
 	],
 	"autoload": {
@@ -17,12 +17,15 @@
 	},
 	"require": {
 		"nette/nette": "2.0.*",
-		"natrim/VisualPaginator": "*"
+		"natrim/visualpaginator": "*"
 	},
 	"authors": [
 		{
-			"name": "Natrim",
-			"email": "maly@kinet.cz"
+			"name": "Jan Marek",
+			"email": "mail@janmarek.net"
+		},
+		{
+			"name": "Natrim"
 		}
 	]
 }
