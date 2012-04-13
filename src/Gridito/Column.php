@@ -338,8 +338,7 @@ class Column extends \Nette\Application\UI\Control
      */
     public function defaultCellRenderer($record, $column)
     {
-        $name = $column->getName();
-        $value = $this->getGrid()->getModel()->getItemValue($record, $this->columnName);
+        $value = $column->getColumnValue($record);
 
         // boolean
         if (in_array($this->type, array('bool', 'boolean')) || is_bool($value)) {
@@ -402,4 +401,13 @@ class Column extends \Nette\Application\UI\Control
         return $this->columnName;
     }
 
+    /**
+     * Returns the value for this column from the row
+     * @param $record mixed one row from which to get value
+     * @return mixed
+     */
+    public function getColumnValue($record)
+    {
+        return $this->getGrid()->getModel()->getItemValue($record, $this->getColumnName());
+    }
 }
