@@ -76,9 +76,14 @@ abstract class AbstractModel implements IModel
      * Set sorting
      * @param string column
      * @param string asc or desc
+     * @throw InvalidArgumentException on wrong sort type
      */
     public function setSorting($column, $type)
     {
+        if ($type !== self::ASC && $type !== self::DESC) {
+            throw new \InvalidArgumentException('Wrong sorting type! Use Gridito\Model\IModel::ASC or Gridito\Model\IModel::DESC !');
+        }
+
         return $this->sorting = array($column, $type);
     }
 
