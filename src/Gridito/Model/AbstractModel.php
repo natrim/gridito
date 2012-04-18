@@ -8,14 +8,15 @@ use ArrayIterator;
  * Abstract Gridito model
  *
  * @author Jan Marek
+ * @author Natrim
  * @license MIT
  */
 abstract class AbstractModel implements IModel
 {
-    /** @var array */
+    /** @var int */
     private $limit;
 
-    /** @var array */
+    /** @var int */
     private $offset;
 
     /** @var array */
@@ -36,7 +37,7 @@ abstract class AbstractModel implements IModel
 
 
     /**
-     * @param $limit
+     * @param $limit int
      */
     public function setLimit($limit)
     {
@@ -45,7 +46,7 @@ abstract class AbstractModel implements IModel
 
 
     /**
-     * @return array
+     * @return int
      */
     public function getLimit()
     {
@@ -54,7 +55,7 @@ abstract class AbstractModel implements IModel
 
 
     /**
-     * @return array
+     * @return int
      */
     public function getOffset()
     {
@@ -63,7 +64,7 @@ abstract class AbstractModel implements IModel
 
 
     /**
-     * @param $offset
+     * @param $offset int
      */
     public function setOffset($offset)
     {
