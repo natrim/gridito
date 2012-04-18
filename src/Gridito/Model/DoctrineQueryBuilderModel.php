@@ -71,7 +71,7 @@ class DoctrineQueryBuilderModel extends AbstractModel
     public function getItemByUniqueId($uniqueId)
     {
         $qb = clone $this->qb;
-        return $qb->andWhere($this->qb->getRootAlias() . '.' . $this->getPrimaryKey() . ' = ' . (int)$uniqueId)->getQuery()->getSingleResult();
+        return $qb->andWhere($this->qb->getRootAlias() . '.' . $this->getPrimaryKey() . ' = :gridprimarykey')->setParameter('gridprimarykey', $uniqueId)->getQuery()->getSingleResult();
     }
 
 

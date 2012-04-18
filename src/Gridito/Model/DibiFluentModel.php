@@ -34,7 +34,7 @@ class DibiFluentModel extends AbstractModel
     public function getItemByUniqueId($uniqueId)
     {
         $fluent = clone $this->fluent;
-        $fluent->where('%n = %i', $this->getPrimaryKey(), $uniqueId);
+        $fluent->where('%n =', $this->getPrimaryKey(), $uniqueId);
         return $fluent->execute()->setRowClass($this->rowClass)->fetch();
     }
 
