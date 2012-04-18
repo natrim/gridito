@@ -38,10 +38,12 @@ abstract class AbstractModel implements IModel
 
     /**
      * @param $limit int
+     * @return \Gridito\Model\AbstractModel
      */
     public function setLimit($limit)
     {
         $this->limit = $limit;
+        return $this;
     }
 
 
@@ -65,10 +67,12 @@ abstract class AbstractModel implements IModel
 
     /**
      * @param $offset int
+     * @return \Gridito\Model\AbstractModel
      */
     public function setOffset($offset)
     {
         $this->offset = $offset;
+        return $this;
     }
 
 
@@ -76,6 +80,7 @@ abstract class AbstractModel implements IModel
      * Set sorting
      * @param string column
      * @param string asc or desc
+     * @return \Gridito\Model\AbstractModel
      * @throw InvalidArgumentException on wrong sort type
      */
     public function setSorting($column, $type)
@@ -84,7 +89,9 @@ abstract class AbstractModel implements IModel
             throw new \InvalidArgumentException('Wrong sorting type! Use Gridito\Model\IModel::ASC or Gridito\Model\IModel::DESC !');
         }
 
-        return $this->sorting = array($column, $type);
+        $this->sorting = array($column, $type);
+
+        return $this;
     }
 
 
@@ -99,10 +106,12 @@ abstract class AbstractModel implements IModel
 
     /**
      * @param $name
+     * @return \Gridito\Model\AbstractModel
      */
     public function setPrimaryKey($name)
     {
         $this->primaryKey = $name;
+        return $this;
     }
 
 
