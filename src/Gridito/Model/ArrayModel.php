@@ -34,25 +34,23 @@ class ArrayModel extends AbstractModel
      */
     public function setPrimaryKey($name)
     {
-        parent::setPrimaryKey($name);
 
         if ($name !== $this->getPrimaryKey()) {
             if ($name === 'id') {
                 $this->data = $this->_data;
             } else {
                 //rebase data on new key
-
                 $data = array();
-
                 foreach ($this->_data as $row) {
                     if (isset($row[$name])) {
                         $data[$row[$name]] = $row;
                     }
                 }
-
                 $this->data = $data;
             }
         }
+
+        parent::setPrimaryKey($name);
 
         return $this;
     }
