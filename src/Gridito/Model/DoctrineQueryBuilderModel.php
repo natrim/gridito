@@ -37,7 +37,8 @@ class DoctrineQueryBuilderModel extends AbstractModel
     protected function _count()
     {
         $qb = clone $this->qb;
-        $qb->select('count(' . $qb->getRootAlias() . ') fullcount');
+        $aliases = $qb->getRootAliases();
+        $qb->select('count(' . $aliases[0] . ') fullcount');
         return $qb->getQuery()->getSingleResult(Query::HYDRATE_SINGLE_SCALAR);
     }
 
@@ -55,7 +56,8 @@ class DoctrineQueryBuilderModel extends AbstractModel
             if (isset($this->columnAliases[$sortColumn])) {
                 $sortColumn = $this->columnAliases[$sortColumn]->qbName;
             } else {
-                $sortColumn = $this->qb->getRootAlias() . '.' . $sortColumn;
+                $aliases = $this->qb->getRootAliases();
+                $sortColumn = $aliases[0] . '.' . $sortColumn;
             }
             $this->qb->orderBy($sortColumn, $sortType);
         }
@@ -71,7 +73,8 @@ class DoctrineQueryBuilderModel extends AbstractModel
     public function getItemByUniqueId($uniqueId)
     {
         $qb = clone $this->qb;
-        return $qb->andWhere($this->qb->getRootAlias() . '.' . $this->getPrimaryKey() . ' = :gridprimarykey')->setParameter('gridprimarykey', $uniqueId)->getQuery()->getSingleResult();
+        $aliases = $qb->getRootAliases();
+        return $qb->andWhere($aliases[0] . '.' . $this->getPrimaryKey() . ' = :gridprimarykey')->setParameter('gridprimarykey', $uniqueId)->getQuery()->getSingleResult();
     }
 
 
