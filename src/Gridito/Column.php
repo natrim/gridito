@@ -13,6 +13,11 @@ use Nette\Utils\Html;
 class Column extends \Nette\Application\UI\Control
 {
 
+    const STRING = ':string';
+    const EMAIL = ':email';
+    const BOOL = ':boolean';
+    const DATE = ':date';
+
     /** @var string */
     private $label;
 
@@ -23,7 +28,7 @@ class Column extends \Nette\Application\UI\Control
     private $maxlen = null;
 
     /** @var string */
-    private $type = 'string';
+    private $type = self::STRING;
 
     /** @var bool */
     private $sortable = false;
@@ -132,10 +137,15 @@ class Column extends \Nette\Application\UI\Control
     /**
      * Set the type of cell
      * @param string type
+     * @throw \InvalidArgumentException
      * @return Column
      */
     public function setType($type)
     {
+        if (!in_array($type, array(self::STRING, self::EMAIL, self::BOOL, self::DATE))) {
+            throw new \InvalidArgumentException('Unknown cell type!');
+        }
+
         $this->type = $type;
         return $this;
     }
@@ -144,7 +154,7 @@ class Column extends \Nette\Application\UI\Control
      * Get the type of cell
      * @return string type
      */
-    public function getType($type)
+    public function getType()
     {
         return $this->type;
     }
@@ -184,7 +194,7 @@ class Column extends \Nette\Application\UI\Control
      * @param bool sortable
      * @return Column
      */
-    public function setSortable($sortable)
+    public function setSortable($sortable = TRUE)
     {
         $this->sortable = $sortable;
         return $this;
@@ -195,7 +205,7 @@ class Column extends \Nette\Application\UI\Control
      * @param bool editable
      * @return Column
      */
-    public function setEditable($editable)
+    public function setEditable($editable = TRUE)
     {
         $this->editable = $editable;
         return $this;
@@ -277,12 +287,16 @@ class Column extends \Nette\Application\UI\Control
 
     /**
      * Render datetime
-     * @param Datetime value
-     * @param string datetime format
+     * @param \Datetime|string value
+     * @param string datetime|date format
      */
     public static function renderDateTime($value, $format)
     {
-        return $value->format($format);
+        if ($value instanceof \DateTime) {
+            return $value->format($format);
+        } else {
+            return date($format, (is_numeric($value) ? $value : strtotime($value)));
+        }
     }
 
     /**
@@ -341,18 +355,18 @@ class Column extends \Nette\Application\UI\Control
         $value = $column->getColumnValue($record);
 
         // boolean
-        if (in_array($this->type, array('bool', 'boolean')) || is_bool($value)) {
+        if ($this->type === self::BOOL || is_bool($value)) {
             return self::renderBoolean($value);
 
             // date
-        } elseif ($value instanceof \DateTime) {
+        } elseif ($this->type === self::DATE || $value instanceof \DateTime) {
             return self::renderDateTime($value, $this->dateTimeFormat);
 
             // email
-        } elseif ($this->type == 'email') {
+        } elseif ($this->type === self::EMAIL) {
             return self::renderEmail($value, $this->maxlen);
 
-            // other
+            // string
         } else {
             if (!is_null($this->format)) {
                 $value = Grid::formatRecordString($record, $this->format);
@@ -386,10 +400,12 @@ class Column extends \Nette\Application\UI\Control
 
     /**
      * @param string $columnName
+     * @return \Gridito\Column
      */
     public function setColumnName($columnName)
     {
         $this->columnName = $columnName;
+        return $this;
     }
 
 
