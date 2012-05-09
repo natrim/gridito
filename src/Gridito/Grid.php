@@ -76,22 +76,27 @@ class Grid extends \Nette\Application\UI\Control
     }
 
     /**
-     * Paginator component
-     * @return \VisualPaginator\VisualPaginator
+     * Create VisualPaginator component if available
+     * @param $name string component name
+     * @return \Nette\ComponentModel\IComponent
      */
-    protected function createComponentVisualPaginator()
+    protected function createComponent($name)
     {
-        $vp = new \VisualPaginator\VisualPaginator;
+        if ($name === 'visualPaginator' && class_exists('VisualPaginator\VisualPaginator')) {
+            $vp = new \VisualPaginator\VisualPaginator;
 
-        $control = $this;
-        $vp->onChange[] = function($parent) use ($control)
-        {
-            if ($parent->presenter->isAjax()) {
-                $control->invalidateControl();
-            }
-        };
+            $control = $this;
+            $vp->onChange[] = function($parent) use ($control)
+            {
+                if ($parent->presenter->isAjax()) {
+                    $control->invalidateControl();
+                }
+            };
 
-        return $vp;
+            return $vp;
+        } else {
+            return parent::createComponent($name);
+        }
     }
 
     /**
@@ -288,13 +293,29 @@ class Grid extends \Nette\Application\UI\Control
     public function getPaginator()
     {
         if (is_null($this->paginator)) {
-            $this->paginator = $this->getComponent('visualPaginator', TRUE)->getPaginator();
-            $this->paginator->setItemsPerPage($this->defaultItemsPerPage); //sets default values
+            if (is_null($vp = $this->getComponent('visualPaginator', FALSE))) {
+                throw new \Nette\InvalidStateException('Paginator was not defined! Use \'setPaginator\' to set paginator or add \'VisualPaginator\' component to project!');
+            } else {
+                $this->setPaginator($vp->getPaginator());
+            }
         }
 
         return $this->paginator;
     }
 
+    /**
+     * Sets paginator
+     * @param \Nette\Utils\Paginator $paginator
+     * @return Grid
+     */
+    public function setPaginator(Paginator $paginator)
+    {
+        $this->paginator = $paginator;
+
+        $this->paginator->setItemsPerPage($this->defaultItemsPerPage); //sets default values
+
+        return $this;
+    }
 
     /**
      * Get security token
@@ -376,7 +397,7 @@ class Grid extends \Nette\Application\UI\Control
 
     /**
      * Create template
-     * @return Template
+     * @return \Nette\Templating\Template
      */
     protected function createTemplate($class = null)
     {
@@ -398,7 +419,10 @@ class Grid extends \Nette\Application\UI\Control
         } elseif ($this->defaultSortColumn) {
             $this->getModel()->setSorting($this->defaultSortColumn, $this->defaultSortType);
         }
-        $this['visualPaginator']->setClass(array('paginator', $this->ajaxClass));
+
+        if (!is_null($vp = $this->getComponent('visualPaginator', FALSE))) {
+            $vp->setClass(array('paginator', $this->ajaxClass));
+        }
 
         $this->template->render();
     }
