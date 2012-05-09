@@ -58,27 +58,49 @@ class Grid extends \Nette\Application\UI\Control
     /** @var callable */
     private $editHandler = null;
 
-
-    public function __construct(\Nette\Http\Session $session, \Nette\Http\Request $request, \VisualPaginator\VisualPaginator $paginator)
+    /**
+     * Constructor
+     * @param \Nette\Http\Session $session
+     * @param \Nette\Http\Request $request
+     */
+    public function __construct(\Nette\Http\Session $session, \Nette\Http\Request $request)
     {
         parent::__construct();
 
         $this->session = $session;
         $this->request = $request;
 
-        $paginator->setPaginator(new \VisualPaginator\Paginator);
-
         $this->addComponent(new Container, 'toolbar');
         $this->addComponent(new Container, 'actions');
         $this->addComponent(new Container, 'columns');
-        $this->addComponent($paginator, 'visualPaginator');
-
-        $this['visualPaginator']->onChange[] = callback($this, 'invalidateControl');
-
-        $this->paginator = $this['visualPaginator']->getPaginator();
-        $this->paginator->setItemsPerPage($this->defaultItemsPerPage);
     }
 
+    /**
+     * Paginator component
+     * @return \VisualPaginator\VisualPaginator
+     */
+    protected function createComponentVisualPaginator()
+    {
+        $vp = new \VisualPaginator\VisualPaginator;
+
+        $control = $this;
+        $vp->onChange[] = function($parent) use ($control)
+        {
+            if ($parent->presenter->isAjax()) {
+                $control->invalidateControl();
+            }
+        };
+
+        return $vp;
+    }
+
+    /**
+     * Format the string by defined format
+     * @static
+     * @param $record
+     * @param $formatString
+     * @return mixed
+     */
     public static function formatRecordString($record, $formatString)
     {
         return Strings::replace($formatString, '#%[^%]*%#u',
@@ -126,13 +148,23 @@ class Grid extends \Nette\Application\UI\Control
         return $sorting[0] === $column->getColumnName();
     }
 
+    /**
+     * Sets row class
+     * @param $class
+     * @return Grid
+     */
     public function setRowClass($class)
     {
         $this->rowClass = $class;
         return $this;
     }
 
-
+    /**
+     * Returns row class
+     * @param $iterator
+     * @param $row
+     * @return callable|mixed|null|string
+     */
     public function getRowClass($iterator, $row)
     {
         if (is_callable($this->rowClass)) {
@@ -256,6 +288,11 @@ class Grid extends \Nette\Application\UI\Control
      */
     public function getPaginator()
     {
+        if (is_null($this->paginator)) {
+            $this->paginator = $this->getComponent('visualPaginator', TRUE)->getPaginator();
+            $this->paginator->setItemsPerPage($this->defaultItemsPerPage); //sets default values
+        }
+
         return $this->paginator;
     }
 
