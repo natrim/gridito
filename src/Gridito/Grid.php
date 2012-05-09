@@ -73,19 +73,10 @@ class Grid extends \Nette\Application\UI\Control
         $this->addComponent(new Container, 'toolbar');
         $this->addComponent(new Container, 'actions');
         $this->addComponent(new Container, 'columns');
-    }
 
-    /**
-     * Create VisualPaginator component if available
-     * @param $name string component name
-     * @return \Nette\ComponentModel\IComponent
-     */
-    protected function createComponent($name)
-    {
-        if ($name === 'visualPaginator' && class_exists('VisualPaginator\VisualPaginator')) {
-            return new \VisualPaginator\VisualPaginator;
-        } else {
-            return parent::createComponent($name);
+        //VisualPaginator
+        if (class_exists('VisualPaginator\VisualPaginator')) {
+            $this->addComponent(new \VisualPaginator\VisualPaginator, 'visualPaginator');
         }
     }
 
