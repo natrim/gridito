@@ -211,7 +211,6 @@ class Grid extends \Nette\Application\UI\Control
     public function getItemsPerPage()
     {
         return $this->getPaginator()->getItemsPerPage();
-        return $this;
     }
 
 
