@@ -83,17 +83,7 @@ class Grid extends \Nette\Application\UI\Control
     protected function createComponent($name)
     {
         if ($name === 'visualPaginator' && class_exists('VisualPaginator\VisualPaginator')) {
-            $vp = new \VisualPaginator\VisualPaginator;
-
-            $control = $this;
-            $vp->onChange[] = function($parent) use ($control)
-            {
-                if ($parent->presenter->isAjax()) {
-                    $control->invalidateControl();
-                }
-            };
-
-            return $vp;
+            return new \VisualPaginator\VisualPaginator;
         } else {
             return parent::createComponent($name);
         }
