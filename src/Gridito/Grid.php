@@ -412,6 +412,9 @@ class Grid extends \Nette\Application\UI\Control
 
         if (!is_null($vp = $this->getComponent('visualPaginator', FALSE))) {
             $vp->setClass(array('paginator', $this->ajaxClass));
+            $this->template->paginator = $vp;
+        } else {
+            $this->template->paginator = $this->getPaginator();
         }
 
         $this->template->render();
