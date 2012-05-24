@@ -267,10 +267,19 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
         $button->title($this->label);
         $button->setText($this->label);
+        $button->id($this->getHtmlId($row ? $this->getGrid()->getModel()->getUniqueId($row) : null));
 
         return $button;
     }
 
+    /**
+     * Return button HTML id
+     * @return string
+     */
+    public function getHtmlId($itemId = NULL)
+    {
+        return 'gBtn-' . $this->lookup('Gridito\Grid', TRUE)->getName() . '-' . $this->lookupPath('Gridito\Grid') . ($itemId ? '-' . $itemId : '');
+    }
 
     /**
      * Render button
