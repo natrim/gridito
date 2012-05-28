@@ -13,10 +13,11 @@ use Nette\Utils\Html;
 class Column extends \Nette\Application\UI\Control
 {
 
-    const STRING = ':string';
-    const EMAIL = ':email';
-    const BOOL = ':boolean';
-    const DATE = ':date';
+    const RENDER_STRING = ':string';
+    const RENDER_EMAIL = ':email';
+    const RENDER_BOOL = ':boolean';
+    const RENDER_DATE = ':date';
+    const RENDER_ARRAY = ':array';
 
     /** @var string */
     private $label;
@@ -28,7 +29,7 @@ class Column extends \Nette\Application\UI\Control
     private $maxlen = null;
 
     /** @var string */
-    private $type = self::STRING;
+    private $type = self::RENDER_STRING;
 
     /** @var bool */
     private $sortable = false;
@@ -47,6 +48,9 @@ class Column extends \Nette\Application\UI\Control
 
     /** @var string */
     public $spamProtection = null;
+
+    /** @var string Array delimiter on renderArray */
+    public $arrayDelimiter = ", ";
 
     /** @var string */
     private $columnName;
@@ -142,7 +146,7 @@ class Column extends \Nette\Application\UI\Control
      */
     public function setType($type)
     {
-        if (!in_array($type, array(self::STRING, self::EMAIL, self::BOOL, self::DATE))) {
+        if (!in_array($type, array(self::RENDER_STRING, self::RENDER_EMAIL, self::RENDER_BOOL, self::RENDER_DATE, self::RENDER_ARRAY))) {
             throw new \InvalidArgumentException('Unknown cell type!');
         }
 
@@ -274,7 +278,7 @@ class Column extends \Nette\Application\UI\Control
      * Render boolean
      * @param bool value
      */
-    public static function renderBoolean($value)
+    public function renderBoolean($value)
     {
         $icon = $value ? 'check' : 'closethick';
         $el = Html::el('span');
@@ -290,7 +294,7 @@ class Column extends \Nette\Application\UI\Control
      * @param \Datetime|string value
      * @param string datetime|date format
      */
-    public static function renderDateTime($value, $format)
+    public function renderDateTime($value, $format)
     {
         if ($value instanceof \DateTime) {
             return $value->format($format);
@@ -304,7 +308,7 @@ class Column extends \Nette\Application\UI\Control
      * @param string $text     text to render
      * @param int     $maxlen maximum length of text
      */
-    public static function renderText($text, $maxlen)
+    public function renderText($text, $maxlen)
     {
         if (is_null($maxlen) || Strings::length($text) < $maxlen) {
             return Html::el('span')->setText($text);
@@ -320,7 +324,7 @@ class Column extends \Nette\Application\UI\Control
      * @param int     $maxlen maximum length of text
      * @return mixed
      */
-    public static function renderEmail($email, $maxlen)
+    public function renderEmail($email, $maxlen)
     {
         if (is_null($this->spamProtection)) {
             $href = $email;
@@ -343,6 +347,22 @@ class Column extends \Nette\Application\UI\Control
         }
     }
 
+    /**
+     * Render email as list
+     * @param $array
+     * @param $maxlen
+     * @return string
+     */
+    public function renderArray($array, $maxlen)
+    {
+        $text = implode($this->arrayDelimiter, (array)$array);
+
+        if (is_null($maxlen) || Strings::length($text) < $maxlen) {
+            return $text;
+        } else {
+            return Strings::truncate($text, $maxlen);
+        }
+    }
 
     /**
      * Default cell renderer
@@ -355,23 +375,27 @@ class Column extends \Nette\Application\UI\Control
         $value = $column->getColumnValue($record);
 
         // boolean
-        if ($this->type === self::BOOL || is_bool($value)) {
-            return self::renderBoolean($value);
+        if ($this->type === self::RENDER_BOOL || is_bool($value)) {
+            return $this->renderBoolean($value);
 
             // date
-        } elseif ($this->type === self::DATE || $value instanceof \DateTime) {
-            return self::renderDateTime($value, $this->dateTimeFormat);
+        } elseif ($this->type === self::RENDER_DATE || $value instanceof \DateTime) {
+            return $this->renderDateTime($value, $this->dateTimeFormat);
 
             // email
-        } elseif ($this->type === self::EMAIL) {
-            return self::renderEmail($value, $this->maxlen);
+        } elseif ($this->type === self::RENDER_EMAIL) {
+            return $this->renderEmail($value, $this->maxlen);
+
+            // array
+        } elseif ($this->type === self::RENDER_ARRAY || is_array($value)) {
+            return $this->renderArray($value, $this->maxlen);
 
             // string
         } else {
             if (!is_null($this->format)) {
                 $value = Grid::formatRecordString($record, $this->format);
             }
-            return self::renderText($value, $this->maxlen);
+            return $this->renderText($value, $this->maxlen);
         }
     }
 
