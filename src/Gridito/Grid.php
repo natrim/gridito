@@ -82,18 +82,17 @@ class Grid extends \Nette\Application\UI\Control
 
     /**
      * Format the string by defined format
-     * @static
      * @param $record
      * @param $formatString
      * @return mixed
      */
-    public static function formatRecordString($record, $formatString)
+    public function formatRecordString($record, $formatString)
     {
         return Strings::replace($formatString, '#%[^%]*%#u',
             function ($m) use ($record)
             {
                 $m = Strings::trim($m[0], '%');
-                return $m != '' ? $record[$m] : '%';
+                return $m !== '' ? $this->getModel()->getItemValue($record, $m) : '%';
             });
     }
 

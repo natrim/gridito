@@ -370,10 +370,8 @@ class Column extends \Nette\Application\UI\Control
      * @param Column $column
      * @return mixed
      */
-    public function defaultCellRenderer($record, $column)
+    public function defaultCellRenderer($value, $record, $column)
     {
-        $value = $column->getColumnValue($record);
-
         // boolean
         if ($this->type === self::RENDER_BOOL || is_bool($value)) {
             return $this->renderBoolean($value);
@@ -393,7 +391,7 @@ class Column extends \Nette\Application\UI\Control
             // string
         } else {
             if (!is_null($this->format)) {
-                $value = Grid::formatRecordString($record, $this->format);
+                $value = $this->getGrid()->formatRecordString($record, $this->format);
             }
             return $this->renderText($value, $this->maxlen);
         }
@@ -406,7 +404,8 @@ class Column extends \Nette\Application\UI\Control
      */
     public function renderCell($record)
     {
-        $column = call_user_func($this->renderer ? : array($this, 'defaultCellRenderer'), $record, $this);
+        $value = $this->getColumnValue($record);
+        $column = call_user_func_array($this->renderer ? : array($this, 'defaultCellRenderer'), array($value, $record, $this));
         if (!($column instanceOf Html)) {
             $column = Html::el('span')->setText($column);
         }
