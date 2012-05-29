@@ -8,7 +8,23 @@ use Nette\Utils\Html;
  * Grid column
  *
  * @author Jan Marek
+ * @author Natrim
  * @license MIT
+ *
+ * @property $columnName string
+ * @property $label string
+ * @property $renderer callable
+ * @property $length int
+ * @property $type string
+ * @property $format string
+ * @property $sortable bool
+ * @property $editable bool
+ * @property $dateTimeFormat string
+ *
+ * @property-read $sorting null|string
+ * @property-read $grid Grid
+ *
+ * @property-write $cellClass callable|string
  */
 class Column extends \Nette\Application\UI\Control
 {
@@ -120,12 +136,12 @@ class Column extends \Nette\Application\UI\Control
 
     /**
      * Set maximal length of cell
-     * @param $maxlen
+     * @param $maxlen int
      * @return Column
      */
     public function setLength($maxlen)
     {
-        $this->maxlen = $maxlen;
+        $this->maxlen = (int)$maxlen;
         return $this;
     }
 
@@ -165,7 +181,7 @@ class Column extends \Nette\Application\UI\Control
 
     /**
      * Set format of the cell
-     * @param mixed format
+     * @param string format
      * @return Column
      */
     public function setFormat($format)
@@ -176,7 +192,7 @@ class Column extends \Nette\Application\UI\Control
 
     /**
      * Get the format
-     * @return mixed
+     * @return string
      */
     public function getFormat()
     {

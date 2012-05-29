@@ -6,7 +6,11 @@ namespace Gridito;
  * Action button
  *
  * @author Jan Marek
+ * @author Natrim
  * @license MIT
+ *
+ * @property $ajax bool
+ * @property-write $confirmationQuestion callable|string
  */
 class Button extends BaseButton
 {
@@ -41,7 +45,7 @@ class Button extends BaseButton
 
     /**
      * Get confirmation question
-     * @param mixed row
+     * @param mixed $row
      * @return string|callback|null
      */
     public function getConfirmationQuestion($row)
@@ -85,8 +89,8 @@ class Button extends BaseButton
 
     /**
      * Create button element
-     * @param mixed row
-     * @return Nette\Web\Html
+     * @param mixed $row
+     * @return \Nette\Utils\Html
      */
     public function createButton($row = null)
     {

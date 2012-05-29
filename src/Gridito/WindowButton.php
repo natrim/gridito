@@ -34,8 +34,8 @@ class WindowButton extends BaseButton
 
     /**
      * Create button element
-     * @param mixed row
-     * @return \Nette\Web\Html
+     * @param mixed $row
+     * @return \Nette\Utils\Html
      */
     public function createButton($row = null)
     {

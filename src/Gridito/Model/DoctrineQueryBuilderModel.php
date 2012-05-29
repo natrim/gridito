@@ -11,6 +11,8 @@ use Nette\ObjectMixin;
  *
  * @author Jan Marek
  * @license MIT
+ *
+ * @property $items array
  */
 class DoctrineQueryBuilderModel extends AbstractModel
 {

@@ -6,7 +6,11 @@ namespace Gridito;
  * Action button
  *
  * @author Jan Marek
+ * @author Natrim
  * @license MIT
+ *
+ * @property $checked bool
+ * @property $ajax bool
  */
 class CheckButton extends BaseButton
 {
@@ -21,7 +25,7 @@ class CheckButton extends BaseButton
      * @param bool $checked
      * @return CheckButton
      */
-    public function SetChecked($checked = true)
+    public function setChecked($checked = true)
     {
         $this->checked = $checked;
         return $this;
@@ -30,7 +34,7 @@ class CheckButton extends BaseButton
 
     /**
      * Is button checked
-     * @param mixed row
+     * @param mixed $row
      * @return bool
      */
     public function isChecked($row = null)
@@ -80,10 +84,10 @@ class CheckButton extends BaseButton
 
     /**
      * Create button element
-     * @param mixed row
-     * @return Nette\Web\Html
+     * @param mixed $row
+     * @return \Nette\Utils\Html
      */
-    protected function createButton($row = null)
+    public function createButton($row = null)
     {
         $el = parent::createButton($row);
         if ($this->isChecked($row)) {

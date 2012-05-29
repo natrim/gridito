@@ -8,7 +8,21 @@ use Nette\Utils\Strings;
 /**
  * Grid
  * @author Jan Marek
+ * @author Natrim
  * @license MIT
+ *
+ * @property $highlightOrderedColumn bool
+ * @property $rowClass callable|string|array
+ * @property $model IModel
+ * @property $itemsPerPage int
+ * @property $ajaxClass string
+ * @property $paginator \Nette\Utils\Paginator
+ * @property $page int
+ *
+ * @property-write $editHandler callable
+ *
+ * @property-read $sorting array|null
+ * @property-read $securityToken
  */
 class Grid extends \Nette\Application\UI\Control
 {
@@ -510,12 +524,23 @@ class Grid extends \Nette\Application\UI\Control
 
 
     /**
-     * Set page
+     * Set page helper
      * @param int page
+     * @return Grid
      */
     private function setPage($page)
     {
         $this->getPaginator()->setPage($page);
+        return $this;
+    }
+
+    /**
+     * Get page helper
+     * @param int page
+     */
+    private function getPage()
+    {
+        return $this->getPaginator()->getPage();
     }
 
     /**

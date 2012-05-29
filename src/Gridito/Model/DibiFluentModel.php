@@ -9,6 +9,8 @@ use DibiFluent;
  *
  * @author Jan Marek
  * @license MIT
+ *
+ * @property $items array
  */
 class DibiFluentModel extends AbstractModel
 {
@@ -30,7 +32,10 @@ class DibiFluentModel extends AbstractModel
         $this->rowClass = $rowClass;
     }
 
-
+    /**
+     * @param $uniqueId
+     * @return mixed
+     */
     public function getItemByUniqueId($uniqueId)
     {
         $fluent = clone $this->fluent;
@@ -38,7 +43,9 @@ class DibiFluentModel extends AbstractModel
         return $fluent->execute()->setRowClass($this->rowClass)->fetch();
     }
 
-
+    /**
+     * @return array
+     */
     public function getItems()
     {
         $fluent = clone $this->fluent;
@@ -64,7 +71,11 @@ class DibiFluentModel extends AbstractModel
         return $this->fluent->count();
     }
 
-
+    /**
+     * @param $item
+     * @param $valueName
+     * @return mixed
+     */
     public function getItemValue($item, $valueName)
     {
         return $item->$valueName;

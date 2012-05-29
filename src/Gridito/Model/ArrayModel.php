@@ -7,6 +7,8 @@ namespace Gridito\Model;
  *
  * @author Natrim
  * @license MIT
+ *
+ * @property $items array
  */
 class ArrayModel extends AbstractModel
 {

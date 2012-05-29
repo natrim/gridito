@@ -8,7 +8,19 @@ use Nette\Utils\Html;
  * Button base
  *
  * @author Jan Marek
+ * @author Natrim
  * @license MIT
+ *
+ * @property $enabled bool
+ * @property $label string
+ * @property $icon string
+ * @property $handler callable
+ * @property $link mixed|string
+ * @property $visible bool
+ * @property $showText bool
+ * @property $htmlId string
+ *
+ * @property-read $grid Grid
  */
 abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 {
@@ -33,10 +45,12 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
     /** @var string */
     private $enabled = true;
 
+    /** @var string */
+    private $htmlId = '';
 
     /**
      * Is button enabled
-     * @param mixed row
+     * @param mixed $row
      * @return bool
      */
     public function isEnabled($row = null)
@@ -47,9 +61,9 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
     /**
      * Set enabled
      * @param bool $enabled
-     * @return CheckButton
+     * @return BaseButton
      */
-    public function SetEnabled($enabled = true)
+    public function setEnabled($enabled = true)
     {
         $this->enabled = $enabled;
         return $this;
@@ -244,8 +258,8 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
     /**
      * Create button element
-     * @param mixed row
-     * @return Nette\Web\Html
+     * @param mixed $row
+     * @return \Nette\Utils\Html
      */
     public function createButton($row = null)
     {
@@ -274,16 +288,32 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
     /**
      * Return button HTML id
+     * @param null $itemId
      * @return string
      */
     public function getHtmlId($itemId = NULL)
     {
+        if (!empty($this->htmlId)) {
+            return $this->htmlId;
+        }
+
         return 'gBtn-' . $this->lookup('Gridito\Grid', TRUE)->getName() . '-' . $this->lookupPath('Gridito\Grid') . ($itemId ? '-' . $itemId : '');
     }
 
     /**
+     * Sects custom button HTML id
+     * @param string $htmlId
+     * @return BaseButton
+     */
+    public function setHtmlId($htmlId)
+    {
+        $this->htmlId = $htmlId;
+        return $this;
+    }
+
+    /**
      * Render button
-     * @param mixed row
+     * @param mixed $row
      */
     public function render($row = null)
     {

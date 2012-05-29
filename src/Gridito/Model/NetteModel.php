@@ -9,6 +9,8 @@ use Nette\Database\Table\Selection;
  *
  * @author Samuel Hapak
  * @license MIT
+ *
+ * @property $items array
  */
 class NetteModel extends AbstractModel
 {

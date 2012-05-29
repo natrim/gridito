@@ -10,6 +10,13 @@ use ArrayIterator;
  * @author Jan Marek
  * @author Natrim
  * @license MIT
+ *
+ * @property $limit int
+ * @property $offset int
+ * @property $primaryKey string
+ *
+ * @property-read $iterator \ArrayIterator
+ * @property-read $sorting array
  */
 abstract class AbstractModel implements IModel
 {
@@ -42,7 +49,7 @@ abstract class AbstractModel implements IModel
      */
     public function setLimit($limit)
     {
-        $this->limit = $limit;
+        $this->limit = (int)$limit;
         return $this;
     }
 
@@ -71,7 +78,7 @@ abstract class AbstractModel implements IModel
      */
     public function setOffset($offset)
     {
-        $this->offset = $offset;
+        $this->offset = (int)$offset;
         return $this;
     }
 
@@ -105,7 +112,7 @@ abstract class AbstractModel implements IModel
 
 
     /**
-     * @param $name
+     * @param $name string
      * @return \Gridito\Model\AbstractModel
      */
     public function setPrimaryKey($name)
