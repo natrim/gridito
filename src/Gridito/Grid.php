@@ -11,6 +11,7 @@ use Nette\Utils\Strings;
  * @author Natrim
  * @license MIT
  *
+ * @property $rememberState bool
  * @property $highlightOrderedColumn bool
  * @property $rowClass callable|string|array
  * @property $model IModel
@@ -48,16 +49,10 @@ class Grid extends \Nette\Application\UI\Control
     /** @var string */
     public $defaultSortType = null;
 
-    /**
-     * @var string
-     * @persistent
-     */
+    /** @var string */
     public $sortColumn = null;
 
-    /**
-     * @var string
-     * @persistent
-     */
+    /** @var string */
     public $sortType = null;
 
     /** @var string */
@@ -71,6 +66,12 @@ class Grid extends \Nette\Application\UI\Control
 
     /** @var callable */
     private $editHandler = null;
+
+    /** @var bool save state into session? */
+    private $remember = FALSE;
+
+    /** @var int|string session timeout (default: until is browser closed) */
+    public $timeout = 0;
 
     /**
      * Constructor
@@ -92,6 +93,100 @@ class Grid extends \Nette\Application\UI\Control
         if (class_exists('VisualPaginator\VisualPaginator')) {
             $this->addComponent(new \VisualPaginator\VisualPaginator, 'visualPaginator');
         }
+    }
+
+    /**
+     * Returns array of classes persistent parameters. They have public visibility and are non-static.
+     * @return array
+     */
+    public static function getPersistentParams()
+    {
+        return array('sortType', 'sortColumn');
+    }
+
+
+    /**
+     * Save the state to session?
+     * @param bool $remember
+     * @return Grid
+     */
+    public function setRememberState($remember = TRUE)
+    {
+        $this->remember = (bool)$remember;
+
+        $vp = $this->getComponent('visualPaginator', FALSE);
+        if ($vp) {
+            $vp->setRememberState($this->remember);
+            if ($vp->rememberState) {
+                $vp->setSession($this->session);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Is the state saving in session
+     * @return bool
+     */
+    public function getRememberState()
+    {
+        return $this->remember;
+    }
+
+    /**
+     * Loads state informations.
+     * @param  array
+     * @return void
+     */
+    public function loadState(array $params)
+    {
+        if ($this->rememberState) {
+            $session = $this->getStateSession();
+            foreach ($this->getPersistentParams() as $name) {
+                if (isset($session[$name]) && !isset($params[$name])) {
+                    if ($name === 'sortType' || $name === 'sortColumn') {
+                        if ($this->presenter->isSignalReceiver($this, 'sort')) {
+                            continue;
+                        }
+                    }
+
+                    $params[$name] = $session[$name];
+                }
+            }
+        }
+
+        parent::loadState($params);
+    }
+
+    /**
+     * Saves state informations for next request.
+     * @param  array
+     * @param  PresenterComponentReflection (internal, used by Presenter)
+     * @return void
+     */
+    public function saveState(array & $params, $reflection = NULL)
+    {
+        parent::saveState($params, $reflection);
+
+        if ($this->rememberState) {
+            $session = $this->getStateSession();
+
+            foreach ($this->getPersistentParams() as $name) {
+                $session[$name] = $this->{$name};
+            }
+
+            $session->setExpiration($this->timeout);
+        }
+    }
+
+
+    /**
+     * @return \Nette\Http\SessionSection
+     */
+    protected function getStateSession()
+    {
+        return $this->session->getSection('Gridito/' . $this->lookupPath('Nette\ComponentModel\IComponent', FALSE) ? : $this->getName() . '/states');
     }
 
     /**
