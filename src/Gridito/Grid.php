@@ -19,6 +19,7 @@ use Nette\Utils\Strings;
  * @property $ajaxClass string
  * @property $paginator \Nette\Utils\Paginator
  * @property $page int
+ * @property $stateTimeout string|int
  *
  * @property-write $editHandler callable
  *
@@ -71,7 +72,7 @@ class Grid extends \Nette\Application\UI\Control
     private $remember = FALSE;
 
     /** @var int|string session timeout (default: until is browser closed) */
-    public $timeout = 0;
+    private $timeout = 0;
 
     /**
      * Constructor
@@ -656,4 +657,22 @@ class Grid extends \Nette\Application\UI\Control
         }
     }
 
+    /**
+     * Sets the timeout for the saved state in session
+     * @param int|string $timeout
+     * @return Grid
+     */
+    public function setStateTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getStateTimeout()
+    {
+        return $this->timeout;
+    }
 }
