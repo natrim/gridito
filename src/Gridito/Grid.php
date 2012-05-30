@@ -665,6 +665,12 @@ class Grid extends \Nette\Application\UI\Control
     public function setStateTimeout($timeout)
     {
         $this->timeout = $timeout;
+
+        $vp = $this->getComponent('visualPaginator', FALSE);
+        if ($vp) {
+            $vp->setStateTimeout($this->timeout);
+        }
+
         return $this;
     }
 
