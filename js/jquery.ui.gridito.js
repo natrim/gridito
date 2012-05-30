@@ -34,7 +34,7 @@
             initSortingIcons("ui-icon-triangle-1-s", "ui-icon-carat-2-n-s");
 
             //persist check state on check buttons
-            this.table.on("mouseout", "a.gridito-button.checked", function () {
+            this.table.on("mouseout mouseup", "a.gridito-button.checked", function () {
                 if (!$(this).hasClass("ui-state-active")) {
                     $(this).addClass("ui-state-active");
                 }
