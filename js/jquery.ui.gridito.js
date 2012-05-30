@@ -33,9 +33,20 @@
             initSortingIcons("ui-icon-triangle-1-n", "ui-icon-triangle-1-s");
             initSortingIcons("ui-icon-triangle-1-s", "ui-icon-carat-2-n-s");
 
+            //persist check state on check buttons
+            this.table.on("mouseout", "a.gridito-button.checked", function () {
+                if (!$(this).hasClass("ui-state-active")) {
+                    $(this).addClass("ui-state-active");
+                }
+            });
+
             // buttons
             this.element.find("a.gridito-button").each(function () {
                 var el = $(this);
+
+                if (el.hasClass("checked")) {
+                    el.addClass("ui-state-active");
+                }
 
                 el.button({
                     icons: {
@@ -51,7 +62,7 @@
                         e.stopImmediatePropagation();
                         e.preventDefault();
 
-                        var win = $('<div></div>').appendTo('body');
+                        var win = $("<div></div>").appendTo("body");
                         win.attr("title", $(this).attr("data-gridito-window-title"));
                         win.load(this.href, function () {
                             win.dialog({

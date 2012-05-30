@@ -17,12 +17,12 @@ class CheckButton extends BaseButton
     /** @var bool */
     private $ajax = false;
 
-    /** @var string */
+    /** @var bool|callable */
     private $checked = false;
 
     /**
      * Set checked
-     * @param bool $checked
+     * @param bool|callable $checked
      * @return CheckButton
      */
     public function setChecked($checked = true)

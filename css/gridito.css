@@ -77,6 +77,10 @@ span.editable {
     margin: 0 0.5em 0 0;
 }
 
+.gridito-button.checked {
+
+}
+
 .gridito-actioncell .ui-button:first-child, .gridito-actioncell .gridito-button:first-child {
     margin-left: 0;
 }

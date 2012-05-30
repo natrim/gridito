@@ -559,17 +559,14 @@ class Grid extends \Nette\Application\UI\Control
      * @param string $name button name
      * @param string $label
      * @param array $options
-     * @throws \Nette\NotImplementedException
      * @return CheckButton
      */
     public function addCheckButton($name, $label = null, array $options = array())
     {
-        throw new \Nette\NotImplementedException('CheckButton is not implemnted currently!');
-
-        //$button = new CheckButton($this['actions'], $name);
-        //$button->setLabel($label);
-        //$this->setOptions($button, $options);
-        //return $button;
+        $button = new CheckButton($this['actions'], $name);
+        $button->setLabel($label);
+        $this->setOptions($button, $options);
+        return $button;
     }
 
 
