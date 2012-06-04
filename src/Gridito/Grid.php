@@ -545,7 +545,7 @@ class Grid extends \Nette\Application\UI\Control
      * @param string label
      * @param mixed|callable data generator
      * @param array options
-     * @return Column
+     * @return VirtualColumn
      */
     public function addVirtualColumn($name, $label = null, $dataGenerator = null, array $options = array())
     {
