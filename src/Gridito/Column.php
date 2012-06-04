@@ -42,6 +42,9 @@ class Column extends \Nette\Application\UI\Control
     private $renderer = null;
 
     /** @var int */
+    private $rendererParamsNum = 3;
+
+    /** @var int */
     private $maxlen = null;
 
     /** @var string */
@@ -126,11 +129,13 @@ class Column extends \Nette\Application\UI\Control
     /**
      * Set cell renderer
      * @param callback cell renderer
+     * @param int cell renderer number of parameters to put
      * @return Column
      */
-    public function setRenderer($cellRenderer)
+    public function setRenderer($cellRenderer, $rendererParamsNum = 3)
     {
         $this->renderer = $cellRenderer;
+        $this->rendererParamsNum = $rendererParamsNum;
         return $this;
     }
 
@@ -421,7 +426,16 @@ class Column extends \Nette\Application\UI\Control
     public function renderCell($record)
     {
         $value = $this->getColumnValue($record);
-        $column = call_user_func_array($this->renderer ? : array($this, 'defaultCellRenderer'), array($value, $record, $this));
+
+        $params = array($value, $record, $this);
+
+        if ($this->rendererParamsNum < 3) { //slice the array
+            $params = array_slice($params, 0, $this->rendererParamsNum);
+        } elseif ($this->rendererParamsNum > 3) { //pad the array
+            $params = array_pad($params, $this->rendererParamsNum, NULL);
+        }
+
+        $column = call_user_func_array($this->renderer ? : array($this, 'defaultCellRenderer'), $params);
         if (!($column instanceOf Html)) {
             $column = Html::el('span')->setText($column);
         }
