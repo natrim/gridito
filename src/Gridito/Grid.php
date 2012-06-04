@@ -539,6 +539,25 @@ class Grid extends \Nette\Application\UI\Control
         return $column;
     }
 
+    /**
+     * Add virtual column
+     * @param string name
+     * @param string label
+     * @param mixed|callable data generator
+     * @param array options
+     * @return Column
+     */
+    public function addVirtualColumn($name, $label = null, $dataGenerator = null, array $options = array())
+    {
+        $componentName = \Nette\Utils\Strings::webalize($name);
+        $componentName = strtr($componentName, '-', '_');
+        $column = new VirtualColumn($this['columns'], $componentName);
+        $column->setColumnName($name);
+        $column->setLabel($label);
+        $column->setDataGenerator($dataGenerator);
+        $this->setOptions($column, $options);
+        return $column;
+    }
 
     /**
      * Add action button
