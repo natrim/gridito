@@ -47,11 +47,8 @@ class Grid extends \Nette\Application\UI\Control
     /** @var array */
     private $defaultSorting = array();
 
-    /** @var string */
-    public $sortColumn = null;
-
-    /** @var string */
-    public $sortType = null;
+    /** @var array */
+    public $sorting = array();
 
     /** @var string */
     private $ajaxClass = 'ajax';
@@ -99,7 +96,7 @@ class Grid extends \Nette\Application\UI\Control
      */
     public static function getPersistentParams()
     {
-        return array('sortType', 'sortColumn');
+        return array('sorting');
     }
 
 
@@ -143,7 +140,7 @@ class Grid extends \Nette\Application\UI\Control
             $session = $this->getStateSession();
             foreach ($this->getPersistentParams() as $name) {
                 if (isset($session[$name]) && !isset($params[$name])) {
-                    if ($name === 'sortType' || $name === 'sortColumn') {
+                    if ($name === 'sorting') {
                         if ($this->presenter->isSignalReceiver($this, 'sort')) {
                             continue;
                         }
@@ -365,14 +362,31 @@ class Grid extends \Nette\Application\UI\Control
      */
     public function getSorting()
     {
-        $columns = $this['columns'];
-        /* @var $columns \Nette\ComponentModel\IContainer */
+        if (is_array($this->sorting) && count($this->sorting) > 0) {
+            /* @var $columns \Nette\ComponentModel\IContainer */
+            $columns = $this['columns'];
 
-        $sortByColumn = $this->sortColumn ? $columns->getComponent($this->sortColumn) : NULL;
-        /* @var $sortByColumn \Gridito\Column */
+            $sorting = array();
 
-        if ($sortByColumn && $sortByColumn->isSortable() && ($this->sortType === Model\IModel::ASC || $this->sortType === Model\IModel::DESC)) {
-            return array($sortByColumn->getColumnName() => $this->sortType);
+            foreach ($this->sorting as $sortColumn => $sortType) {
+                if (is_null($sortType)) {
+                    continue;
+                }
+
+                /* @var $sortByColumn \Gridito\Column */
+                $sortByColumn = $sortColumn ? $columns->getComponent($sortColumn) : NULL;
+
+                if ($sortByColumn && $sortByColumn->isSortable()) {
+                    $sorting[$sortByColumn->getColumnName()] = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? Model\IModel::ASC : Model\IModel::DESC);
+                }
+            }
+
+            if (count($sorting) > 0) {
+                return $sorting;
+            } else {
+                return NULL;
+            }
+
         } elseif (is_array($this->defaultSorting) && count($this->defaultSorting) > 0) {
             return $this->defaultSorting;
         } else {
@@ -480,12 +494,17 @@ class Grid extends \Nette\Application\UI\Control
      * @param $sortColumn
      * @param $sortType
      */
-    public function handleSort($sortColumn, $sortType)
+    public function handleSort($column, $type)
     {
+        //return to page 1
+        $this->setPage(1);
+
+        //set sorting
+        $this->sorting[$column] = $type;
+
         if ($this->presenter->isAjax()) {
             $this->invalidateControl();
         }
-        $this->paginator->page = 1;
     }
 
 
@@ -507,11 +526,9 @@ class Grid extends \Nette\Application\UI\Control
         $this->getModel()->setLimit($this->paginator->getLength());
         $this->getModel()->setOffset($this->paginator->getOffset());
 
-        if ($this->sortColumn && $this['columns']->getComponent($this->sortColumn)->isSortable()) {
-            $sortByColumn = $this['columns']->getComponent($this->sortColumn);
-            $this->getModel()->setSorting($sortByColumn->getColumnName(), $this->sortType);
-        } elseif (is_array($this->defaultSorting) && count($this->defaultSorting) > 0) {
-            $this->getModel()->setSorting($this->defaultSorting);
+        $sorting = $this->getSorting();
+        if ($sorting) {
+            $this->getModel()->setSorting($sorting);
         }
 
         if (!is_null($vp = $this->getComponent('visualPaginator', FALSE))) {
