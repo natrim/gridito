@@ -140,12 +140,6 @@ class Grid extends \Nette\Application\UI\Control
             $session = $this->getStateSession();
             foreach ($this->getPersistentParams() as $name) {
                 if (isset($session[$name]) && !isset($params[$name])) {
-                    if ($name === 'sorting') {
-                        if ($this->presenter->isSignalReceiver($this, 'sort')) {
-                            continue;
-                        }
-                    }
-
                     $params[$name] = $session[$name];
                 }
             }
