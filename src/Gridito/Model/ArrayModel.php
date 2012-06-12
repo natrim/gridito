@@ -78,7 +78,7 @@ class ArrayModel extends AbstractModel
         $data = array_slice($this->data, (int)$this->getOffset(), $this->getLimit(), TRUE);
 
         if (count($this->getSorting()) > 0) {
-            $this->_sort($data);
+            $data = $this->_sort($data);
         }
 
         return $data;
