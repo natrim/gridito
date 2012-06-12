@@ -356,11 +356,11 @@ class Grid extends \Nette\Application\UI\Control
      */
     public function getSorting()
     {
+        $sorting = array();
+
         if (is_array($this->sorting) && count($this->sorting) > 0) {
             /* @var $columns \Nette\ComponentModel\IContainer */
             $columns = $this['columns'];
-
-            $sorting = array();
 
             foreach ($this->sorting as $sortColumn => $sortType) {
                 if (is_null($sortType)) {
@@ -374,13 +374,10 @@ class Grid extends \Nette\Application\UI\Control
                     $sorting[$sortByColumn->getColumnName()] = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? Model\IModel::ASC : Model\IModel::DESC);
                 }
             }
+        }
 
-            if (count($sorting) > 0) {
-                return $sorting;
-            } else {
-                return NULL;
-            }
-
+        if (count($sorting) > 0) {
+            return $sorting;
         } elseif (is_array($this->defaultSorting) && count($this->defaultSorting) > 0) {
             return $this->defaultSorting;
         } else {
