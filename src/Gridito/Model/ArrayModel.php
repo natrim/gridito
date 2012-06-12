@@ -77,41 +77,41 @@ class ArrayModel extends AbstractModel
     {
         $data = array_slice($this->data, (int)$this->getOffset(), $this->getLimit(), TRUE);
 
-        list($sortColumn, $sortType) = $this->getSorting();
-
-        if ($sortColumn) {
-            $data = $this->_sort($data, $sortColumn, ($sortType === self::DESC ? FALSE : TRUE));
+        if (count($this->getSorting()) > 0) {
+            $this->_sort($data);
         }
 
         return $data;
     }
 
     /**
-     * Sort the array by key
-     * taken from php.net
-     * @param array $array
-     * @param $key
-     * @param bool $asc
+     * Sort the array
+     * @param array $data
      * @return array
      */
-    private function _sort(array $array, $key, $asc = TRUE)
+    private function _sort(array $data)
     {
         $result = array();
 
-        $values = array();
-        foreach ($array as $id => $value) {
-            $values[$id] = isset($value[$key]) ? $value[$key] : '';
+        //prepare temporary arrays
+        $sortParams = array();
+        foreach ($this->getSorting() as $sortColumn => $sortType) {
+            foreach ($data as $id => $row) {
+                $sortParams[$sortColumn][$id] = $row[$sortColumn];
+            }
+
+            $sortParams[] = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? SORT_ASC : SORT_DESC);
         }
 
-        if ($asc) {
-            asort($values);
-        }
-        else {
-            arsort($values);
-        }
+        $sortParams[] = &$data;
+        call_user_func_array('array_multisort', $sortParams);
 
-        foreach ($values as $key => $value) {
-            $result[$key] = $array[$key];
+        //clean
+        unset($sortParams);
+
+        //return back the id
+        foreach ($data as $row) {
+            $result[$row[$this->getPrimaryKey()]] = $row;
         }
 
         return $result;

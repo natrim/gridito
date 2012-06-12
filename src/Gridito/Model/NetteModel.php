@@ -44,10 +44,13 @@ class NetteModel extends AbstractModel
     {
         $select = clone $this->selection;
 
-        list($sortColumn, $sortType) = $this->getSorting();
-        if ($sortColumn) {
-            $select->order("$sortColumn $sortType");
+        if (count($this->getSorting()) > 0) {
+            foreach ($this->getSorting() as $sortColumn => $sortType) {
+                $sortType = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? 'ASC' : 'DESC');
+                $select->order("$sortColumn $sortType");
+            }
         }
+
         return $select->limit($this->getLimit(), $this->getOffset())
             ->fetchPairs($this->getPrimaryKey());
     }

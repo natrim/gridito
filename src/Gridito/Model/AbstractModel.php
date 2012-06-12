@@ -27,7 +27,7 @@ abstract class AbstractModel implements IModel
     private $offset;
 
     /** @var array */
-    private $sorting = array(null, null);
+    private $sorting = array();
 
     /** @var string */
     private $primaryKey = 'id';
@@ -88,15 +88,29 @@ abstract class AbstractModel implements IModel
      * @param string column
      * @param string asc or desc
      * @return \Gridito\Model\AbstractModel
-     * @throw InvalidArgumentException on wrong sort type
      */
-    public function setSorting($column, $type)
+    public function setSorting($column, $type = self::ASC)
     {
-        if ($type !== self::ASC && $type !== self::DESC) {
-            throw new \InvalidArgumentException('Wrong sorting type! Use Gridito\Model\IModel::ASC or Gridito\Model\IModel::DESC !');
+        if (is_array($column)) {
+            $this->sorting = $column;
+        } else {
+            $this->sorting[$column] = $type;
         }
 
-        $this->sorting = array($column, $type);
+        return $this;
+    }
+
+    /**
+     * Remove sorting
+     * @param string column
+     * @return \Gridito\Model\AbstractModel
+     * @throw InvalidArgumentException on wrong sort type
+     */
+    public function unsetSorting($column)
+    {
+        if (isset($this->sorting[$column])) {
+            unset($this->sorting[$column]);
+        }
 
         return $this;
     }

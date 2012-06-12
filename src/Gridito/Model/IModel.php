@@ -21,7 +21,7 @@ interface IModel extends \Countable
 
     public function getItems();
 
-    public function setSorting($column, $type);
+    public function setSorting($column, $type = self::ASC);
 
     public function setLimit($limit);
 

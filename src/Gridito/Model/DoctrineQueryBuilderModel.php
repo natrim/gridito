@@ -53,15 +53,16 @@ class DoctrineQueryBuilderModel extends AbstractModel
         $this->qb->setMaxResults($this->getLimit());
         $this->qb->setFirstResult($this->getOffset());
 
-        list($sortColumn, $sortType) = $this->getSorting();
-        if ($sortColumn) {
-            if (isset($this->columnAliases[$sortColumn])) {
-                $sortColumn = $this->columnAliases[$sortColumn]->qbName;
-            } else {
-                $aliases = $this->qb->getRootAliases();
-                $sortColumn = $aliases[0] . '.' . $sortColumn;
+        if (count($this->getSorting()) > 0) {
+            foreach ($this->getSorting() as $sortColumn => $sortType) {
+                if (isset($this->columnAliases[$sortColumn])) {
+                    $sortColumn = $this->columnAliases[$sortColumn]->qbName;
+                } else {
+                    $aliases = $this->qb->getRootAliases();
+                    $sortColumn = $aliases[0] . '.' . $sortColumn;
+                }
+                $this->qb->addOrderBy($sortColumn, ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? 'ASC' : 'DESC'));
             }
-            $this->qb->orderBy($sortColumn, $sortType);
         }
 
         return $this->qb->getQuery()->getResult();
