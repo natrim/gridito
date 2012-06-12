@@ -258,9 +258,13 @@ class Column extends \Nette\Application\UI\Control
             return NULL;
         }
 
-        list($column, $type) = $sorting;
+        foreach ($sorting as $column => $type) {
+            if ($column === $this->columnName) {
+                return $type;
+            }
+        }
 
-        return $column === $this->columnName ? $type : NULL;
+        return NULL;
     }
 
 

@@ -44,11 +44,8 @@ class Grid extends \Nette\Application\UI\Control
     /** @var int */
     private $defaultItemsPerPage = 20;
 
-    /** @var string */
-    public $defaultSortColumn = null;
-
-    /** @var string */
-    public $defaultSortType = null;
+    /** @var array */
+    private $defaultSorting = array();
 
     /** @var string */
     public $sortColumn = null;
@@ -240,7 +237,7 @@ class Grid extends \Nette\Application\UI\Control
             return FALSE;
         }
 
-        return $sorting[0] === $column->getColumnName();
+        return isset($sorting[$column->getColumnName()]);
     }
 
     /**
@@ -348,10 +345,17 @@ class Grid extends \Nette\Application\UI\Control
      * @param string $type asc or desc
      * @return Grid
      */
-    public function setDefaultSorting($column, $type)
+    public function setDefaultSorting($column, $type = Model\IModel::ASC)
     {
-        $this->defaultSortColumn = $column;
-        $this->defaultSortType = $type;
+        if (is_array($column)) {
+            $this->defaultSorting = array_map(function($type)
+            {
+                return ((is_string($type) && strncasecmp($type, 'd', 1)) || $type > 0 ? Model\IModel::ASC : Model\IModel::DESC);
+            }, $column);
+        } else {
+            $this->defaultSorting[$column] = ((is_string($type) && strncasecmp($type, 'd', 1)) || $type > 0 ? Model\IModel::ASC : Model\IModel::DESC);
+        }
+
         return $this;
     }
 
@@ -368,9 +372,9 @@ class Grid extends \Nette\Application\UI\Control
         /* @var $sortByColumn \Gridito\Column */
 
         if ($sortByColumn && $sortByColumn->isSortable() && ($this->sortType === Model\IModel::ASC || $this->sortType === Model\IModel::DESC)) {
-            return array($sortByColumn->getColumnName(), $this->sortType);
-        } elseif ($this->defaultSortColumn) {
-            return array($this->defaultSortColumn, $this->defaultSortType);
+            return array($sortByColumn->getColumnName() => $this->sortType);
+        } elseif (is_array($this->defaultSorting) && count($this->defaultSorting) > 0) {
+            return $this->defaultSorting;
         } else {
             return NULL;
         }
@@ -506,8 +510,8 @@ class Grid extends \Nette\Application\UI\Control
         if ($this->sortColumn && $this['columns']->getComponent($this->sortColumn)->isSortable()) {
             $sortByColumn = $this['columns']->getComponent($this->sortColumn);
             $this->getModel()->setSorting($sortByColumn->getColumnName(), $this->sortType);
-        } elseif ($this->defaultSortColumn) {
-            $this->getModel()->setSorting($this->defaultSortColumn, $this->defaultSortType);
+        } elseif (is_array($this->defaultSorting) && count($this->defaultSorting) > 0) {
+            $this->getModel()->setSorting($this->defaultSorting);
         }
 
         if (!is_null($vp = $this->getComponent('visualPaginator', FALSE))) {
