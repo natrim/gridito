@@ -496,9 +496,6 @@ class Grid extends \Nette\Application\UI\Control
      */
     public function handleSort($column, $type)
     {
-        //return to page 1
-        $this->setPage(1);
-
         //set sorting
         $this->sorting[$column] = $type;
 
