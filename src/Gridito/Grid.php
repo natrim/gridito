@@ -48,7 +48,7 @@ class Grid extends \Nette\Application\UI\Control
     private $defaultSorting = array();
 
     /** @var array */
-    public $sorting = array();
+    public $sort = array();
 
     /** @var string */
     private $ajaxClass = 'ajax';
@@ -96,7 +96,7 @@ class Grid extends \Nette\Application\UI\Control
      */
     public static function getPersistentParams()
     {
-        return array('sorting');
+        return array('sort');
     }
 
 
@@ -358,11 +358,11 @@ class Grid extends \Nette\Application\UI\Control
     {
         $sorting = array();
 
-        if (is_array($this->sorting) && count($this->sorting) > 0) {
+        if (is_array($this->sort) && count($this->sort) > 0) {
             /* @var $columns \Nette\ComponentModel\IContainer */
             $columns = $this['columns'];
 
-            foreach ($this->sorting as $sortColumn => $sortType) {
+            foreach ($this->sort as $sortColumn => $sortType) {
                 if (is_null($sortType)) {
                     continue;
                 }
@@ -488,7 +488,7 @@ class Grid extends \Nette\Application\UI\Control
     public function handleSort($column, $type)
     {
         //set sorting
-        $this->sorting[$column] = $type;
+        $this->sort[$column] = $type;
 
         if ($this->presenter->isAjax()) {
             $this->invalidateControl();
