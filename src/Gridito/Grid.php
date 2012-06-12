@@ -20,6 +20,7 @@ use Nette\Utils\Strings;
  * @property $paginator \Nette\Utils\Paginator
  * @property $page int
  * @property $stateTimeout string|int
+ * @property $multisort bool
  *
  * @property-write $editHandler callable
  *
@@ -49,6 +50,9 @@ class Grid extends \Nette\Application\UI\Control
 
     /** @var array */
     public $sort = array();
+
+    /** @var bool */
+    private $multisort_enabled = FALSE;
 
     /** @var string */
     private $ajaxClass = 'ajax';
@@ -488,7 +492,11 @@ class Grid extends \Nette\Application\UI\Control
     public function handleSort($column, $type)
     {
         //set sorting
-        $this->sort[$column] = $type;
+        if ($this->multisort_enabled) {
+            $this->sort[$column] = $type;
+        } else {
+            $this->sort = array($column => $type);
+        }
 
         if ($this->presenter->isAjax()) {
             $this->invalidateControl();
@@ -708,5 +716,24 @@ class Grid extends \Nette\Application\UI\Control
     public function getStateTimeout()
     {
         return $this->timeout;
+    }
+
+    /**
+     * Enables / disabled multi sorting
+     * @param boolean $multisort_enabled
+     * @return \Gridito\Grid
+     */
+    public function setMultisort($multisort_enabled = TRUE)
+    {
+        $this->multisort_enabled = (bool)$multisort_enabled;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getMultisort()
+    {
+        return $this->multisort_enabled;
     }
 }
