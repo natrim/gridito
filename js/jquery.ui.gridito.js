@@ -67,7 +67,10 @@
                         win.load(this.href, function () {
                             win.dialog({
                                 modal: true,
-                                width: 600
+                                width: 600,
+                                close: function () {
+                                    win.remove();
+                                }
                             });
                             win.find("input:first").focus();
                         });
