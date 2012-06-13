@@ -63,7 +63,7 @@
                         e.preventDefault();
 
                         var win = $("<div></div>").appendTo("body");
-                        win.attr("title", $(this).attr("data-gridito-window-title"));
+                        win.attr("id", $(this).attr("id") + "-window").attr("title", $(this).attr("data-gridito-window-title"));
                         win.load(this.href, function () {
                             win.dialog({
                                 modal: true,
