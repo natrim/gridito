@@ -63,14 +63,15 @@
                         e.preventDefault();
 
                         var win = $("<div></div>").appendTo("body");
-                        win.attr("id", $(this).attr("id") + "-window").attr("title", $(this).attr("data-gridito-window-title"));
+                        var button = $(this);
+                        win.attr("id", button.attr("id") + "-window").attr("title", button.attr("data-gridito-window-title"));
                         win.load(this.href, function () {
                             win.dialog({
-                                modal: !!(parseInt($(this).attr("data-gridito-window-modal")) === 1),
-                                width: isNaN(parseInt($(this).attr("data-gridito-window-width"))) ? "auto" : $(this).attr("data-gridito-window-width"),
-                                height: isNaN(parseInt($(this).attr("data-gridito-window-height"))) ? "auto" : $(this).attr("data-gridito-window-height"),
-                                draggable: !!(parseInt($(this).attr("data-gridito-window-draggable")) === 1),
-                                resizable: !!(parseInt($(this).attr("data-gridito-window-resizable")) === 1),
+                                modal: !!(parseInt(button.attr("data-gridito-window-modal")) === 1),
+                                width: isNaN(parseInt(button.attr("data-gridito-window-width"))) ? "auto" : button.attr("data-gridito-window-width"),
+                                height: isNaN(parseInt(button.attr("data-gridito-window-height"))) ? "auto" : button.attr("data-gridito-window-height"),
+                                draggable: !!(parseInt(button.attr("data-gridito-window-draggable")) === 1),
+                                resizable: !!(parseInt(button.attr("data-gridito-window-resizable")) === 1),
                                 close: function () {
                                     win.remove();
                                 }
