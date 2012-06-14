@@ -66,8 +66,11 @@
                         win.attr("id", $(this).attr("id") + "-window").attr("title", $(this).attr("data-gridito-window-title"));
                         win.load(this.href, function () {
                             win.dialog({
-                                modal: true,
-                                width: 600,
+                                modal: !!(parseInt($(this).attr("data-gridito-window-modal")) === 1),
+                                width: isNaN(parseInt($(this).attr("data-gridito-window-width"))) ? "auto" : $(this).attr("data-gridito-window-width"),
+                                height: isNaN(parseInt($(this).attr("data-gridito-window-height"))) ? "auto" : $(this).attr("data-gridito-window-height"),
+                                draggable: !!(parseInt($(this).attr("data-gridito-window-draggable")) === 1),
+                                resizable: !!(parseInt($(this).attr("data-gridito-window-resizable")) === 1),
                                 close: function () {
                                     win.remove();
                                 }
