@@ -221,7 +221,7 @@ class Grid extends \Nette\Application\UI\Control
 
     /**
      * Is column highlighted?
-     * @param Column $column
+     * @param Column|VirtualColumn $column
      * @return bool
      */
     public function isColumnHighlighted(Column $column)
@@ -232,7 +232,11 @@ class Grid extends \Nette\Application\UI\Control
             return FALSE;
         }
 
-        return isset($sorting[$column->getColumnName()]);
+        if ($column instanceof VirtualColumn) {
+            return isset($sorting[$column->getSortingColumnName()]);
+        } else {
+            return isset($sorting[$column->getColumnName()]);
+        }
     }
 
     /**
