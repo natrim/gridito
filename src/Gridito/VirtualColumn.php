@@ -61,7 +61,7 @@ class VirtualColumn extends Column
      */
     public function isSortable()
     {
-        return ($this->sortable && !is_null($this->sortingColumnName));
+        return (parent::isSortable() && !is_null($this->sortingColumnName));
     }
 
     /**
