@@ -371,11 +371,17 @@ class Grid extends \Nette\Application\UI\Control
                     continue;
                 }
 
-                /* @var $sortByColumn \Gridito\Column */
+                /* @var $sortByColumn \Gridito\Column|\Gridito\VirtualColumn */
                 $sortByColumn = $sortColumn ? $columns->getComponent($sortColumn) : NULL;
 
                 if ($sortByColumn && $sortByColumn->isSortable()) {
-                    $sorting[$sortByColumn->getColumnName()] = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? Model\IModel::ASC : Model\IModel::DESC);
+                    if ($sortByColumn instanceof VirtualColumn) {
+                        $columnName = $sortByColumn->getSortingColumnName();
+                    } else {
+                        $columnName = $sortByColumn->getColumnName();
+                    }
+
+                    $sorting[$columnName] = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? Model\IModel::ASC : Model\IModel::DESC);
                 }
             }
         }

@@ -34,6 +34,8 @@ class VirtualColumn extends Column
      */
     private $dataGenerator;
 
+    /** @var string */
+    private $sortingColumnName;
 
     /**
      * @param mixed|callable $dataGenerator
@@ -59,19 +61,48 @@ class VirtualColumn extends Column
      */
     public function isSortable()
     {
-        return FALSE;
+        return ($this->sortable && !is_null($this->sortingColumnName));
     }
 
     /**
      * Set sortable
      * @param bool $sortable sortable
-     * @throws \Nette\NotSupportedException
+     * @param null $sortingColumnName
+     * @throws \Nette\InvalidArgumentException
+     * @return \Gridito\Column|\Gridito\VirtualColumn
      */
-    public function setSortable($sortable = TRUE)
+    public function setSortable($sortable = TRUE, $sortingColumnName = NULL)
     {
-        $this->sortable = FALSE;
-        throw new \Nette\NotSupportedException('Virtual columns cannot be sortable!');
+        $this->sortingColumnName = $sortingColumnName;
+
+        if (is_null($this->sortingColumnName)) {
+            throw new \Nette\InvalidArgumentException('Virtual column can be only sortable after setting column alias!');
+        }
+
+        parent::setSortable($sortable);
+        return $this;
     }
+
+    /**
+     * Set column sorting alias
+     * @param $name string|NULL
+     * @return VirtualColumn
+     */
+    public function setSortingColumnName($name = NULL)
+    {
+        $this->sortingColumnName = $name;
+        return $this;
+    }
+
+    /**
+     * Gets the sorting alias
+     * @return string
+     */
+    public function getSortingColumnName()
+    {
+        return $this->sortingColumnName;
+    }
+
 
     /**
      * Get sorting
@@ -79,6 +110,18 @@ class VirtualColumn extends Column
      */
     public function getSorting()
     {
+        $sorting = $this->getGrid()->getSorting();
+
+        if ($sorting === NULL) {
+            return NULL;
+        }
+
+        foreach ($sorting as $column => $type) {
+            if ($column === $this->sortingColumnName) {
+                return $type;
+            }
+        }
+
         return NULL;
     }
 
