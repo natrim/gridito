@@ -91,7 +91,7 @@ class ArrayModel extends AbstractModel
      * @param array $data
      * @return array
      */
-    private function _sort(array $data)
+    protected function _sort(array $data)
     {
         $result = array();
 
@@ -99,7 +99,7 @@ class ArrayModel extends AbstractModel
         $sortParams = array();
         foreach ($this->getSorting() as $sortColumn => $sortType) {
             foreach ($data as $id => $row) {
-                $sortParams[$sortColumn][$id] = $row[$sortColumn];
+                $sortParams[$sortColumn][$id] = $this->getItemValue($row, $sortColumn);
             }
 
             $sortParams[] = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? SORT_ASC : SORT_DESC);
@@ -113,7 +113,7 @@ class ArrayModel extends AbstractModel
 
         //return back the id
         foreach ($data as $row) {
-            $result[$row[$this->getPrimaryKey()]] = $row;
+            $result[$this->getUniqueId($row)] = $row;
         }
 
         return $result;
