@@ -75,11 +75,13 @@ class ArrayModel extends AbstractModel
      */
     public function getItems()
     {
-        $data = array_slice($this->data, (int)$this->getOffset(), $this->getLimit(), TRUE);
+        $data = $this->data;
 
         if (count($this->getSorting()) > 0) {
             $data = $this->_sort($data);
         }
+
+        $data = array_slice($data, (int)$this->getOffset(), $this->getLimit(), TRUE);
 
         return $data;
     }
