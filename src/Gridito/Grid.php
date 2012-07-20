@@ -190,11 +190,12 @@ class Grid extends \Nette\Application\UI\Control
      */
     public function formatRecordString($record, $formatString)
     {
+        $grid = $this;
         return Strings::replace($formatString, '#%[^%]*%#u',
-            function ($m) use ($record)
+            function ($m) use ($record, $grid)
             {
                 $m = Strings::trim($m[0], '%');
-                return $m !== '' ? $this->getModel()->getItemValue($record, $m) : '%';
+                return $m !== '' ? $grid->getModel()->getItemValue($record, $m) : '%';
             });
     }
 
