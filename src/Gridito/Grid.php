@@ -545,6 +545,9 @@ class Grid extends \Nette\Application\UI\Control
             $this->template->paginator = $this->getPaginator();
         }
 
+        //for default check
+        $this->template->defaultSorting = (array)$this->defaultSorting;
+
         $this->template->render();
     }
 
