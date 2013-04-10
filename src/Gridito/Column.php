@@ -331,7 +331,7 @@ class Column extends \Nette\Application\UI\Control
     /**
      * Render the text, takes care of length
      * @param string $text     text to render
-     * @param int     $maxlen maximum length of text
+     * @param int $maxlen maximum length of text
      */
     public function renderText($text, $maxlen)
     {
@@ -346,7 +346,7 @@ class Column extends \Nette\Application\UI\Control
     /**
      * Render the email address, takes care of length
      * @param string $email  email address
-     * @param int     $maxlen maximum length of text
+     * @param int $maxlen maximum length of text
      * @return mixed
      */
     public function renderEmail($email, $maxlen)
@@ -451,6 +451,7 @@ class Column extends \Nette\Application\UI\Control
             $column->data['url'] = $this->getGrid()->link('edit!');
             $column->data['name'] = $this->getName();
             $column->data['id'] = $this->getGrid()->getModel()->getUniqueId($record);
+            $column->title = 'Click to edit';
         }
         echo $column;
     }

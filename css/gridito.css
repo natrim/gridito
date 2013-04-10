@@ -58,14 +58,12 @@ div.gridito-flash .ui-icon, div.gridito-flash .gridito-table th .gridito-sorting
 }
 
 .gridito-table tr {
-    max-height: 2ex;
+    max-height: 2em;
 }
 
-span.editable {
+.gridito-table .editable {
     width: 100%;
-    min-height: 30px;
-    line-height: 30px;
-    margin: 0px;
+    margin: 0;
     display: block;
 }
 

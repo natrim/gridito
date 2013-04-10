@@ -90,6 +90,10 @@
                     });
                 }
             });
+
+            this.table.on('click', 'span.editable', function (event) {
+                $.startedit($(this));
+            });
         }
 
     });
@@ -100,12 +104,14 @@
 jQuery.extend({
     stopedit: function (who) {
         var span = who.data('span');
-        span.text(who.val());
-        span.attr('data-value', who.val());
-        var data = new Object();
-        data[span.attr('data-name')] = who.val();
-        data['id'] = span.attr('data-id');
-        jQuery.post(span.attr('data-url'), data);
+        if (who.val() != span.attr('data-value')) {
+            span.text(who.val());
+            span.attr('data-value', who.val());
+            var data = {};
+            data[span.attr('data-name')] = who.val();
+            data['id'] = span.attr('data-id');
+            jQuery.post(span.attr('data-url'), data);
+        }
         who.replaceWith(span);
     },
     startedit: function (who) {
@@ -120,14 +126,16 @@ jQuery.extend({
         input.data('span', who);
         input.val(who.attr('data-value'));
         input.addClass('editable');
-        input.blur(function () { jQuery.stopedit(jQuery(this)); });
-        input.keyup(function (event) {if (event.keyCode == 27) { input.blur(); }}
+        input.on('blur', function () {
+            jQuery.stopedit(jQuery(this));
+        });
+        input.on('keyup', function (event) {
+                if (event.keyCode == 27) {
+                    input.blur();
+                }
+            }
         );
         who.replaceWith(input);
         input.focus();
     }
-});
-
-jQuery('span.editable').live('click', function (event) {
-    jQuery.startedit(jQuery(this));
 });
