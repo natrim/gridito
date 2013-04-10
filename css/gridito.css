@@ -65,6 +65,7 @@ div.gridito-flash .ui-icon, div.gridito-flash .gridito-table th .gridito-sorting
     width: 100%;
     margin: 0;
     display: block;
+    border: 1px dotted red;
 }
 
 .gridito-table .ui-state-hover .gridito-cell, .gridito-table tbody tr:hover .gridito-cell, .gridito-table .gridito-button:hover .gridito-cell {

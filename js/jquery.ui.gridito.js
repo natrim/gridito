@@ -122,7 +122,7 @@ jQuery.extend({
             jQuery.post(who.attr('data-url'), data);
             return;
         }
-        var input = jQuery('<input type="text" />');
+        var input = jQuery('<textarea />');
         input.data('span', who);
         input.val(who.attr('data-value'));
         input.addClass('editable');
