@@ -2,7 +2,8 @@
 
 namespace Gridito;
 
-use Nette\ComponentModel\Container, Nette\Utils\Paginator;
+use Nette\ComponentModel\Container;
+use Nette\Utils\Paginator;
 use Nette\Utils\Strings;
 
 /**
@@ -192,8 +193,7 @@ class Grid extends \Nette\Application\UI\Control
     {
         $grid = $this;
         return Strings::replace($formatString, '#%[^%]*%#u',
-            function ($m) use ($record, $grid)
-            {
+            function ($m) use ($record, $grid) {
                 $m = Strings::trim($m[0], '%');
                 return $m !== '' ? $grid->getModel()->getItemValue($record, $m) : '%';
             });
@@ -348,8 +348,7 @@ class Grid extends \Nette\Application\UI\Control
     public function setDefaultSorting($column, $type = Model\IModel::ASC)
     {
         if (is_array($column)) {
-            $this->defaultSorting = array_map(function($type)
-            {
+            $this->defaultSorting = array_map(function ($type) {
                 return ((is_string($type) && strncasecmp($type, 'd', 1)) || $type > 0 ? Model\IModel::ASC : Model\IModel::DESC);
             }, $column);
         } else {
@@ -564,6 +563,24 @@ class Grid extends \Nette\Application\UI\Control
         $componentName = \Nette\Utils\Strings::webalize($name);
         $componentName = strtr($componentName, '-', '_');
         $column = new Column($this['columns'], $componentName);
+        $column->setColumnName($name);
+        $column->setLabel($label);
+        $this->setOptions($column, $options);
+        return $column;
+    }
+
+    /**
+     * Add checkbox column
+     * @param string name
+     * @param string label
+     * @param array options
+     * @return CheckboxColumn
+     */
+    public function addCheckboxColumn($name, $label = null, array $options = array())
+    {
+        $componentName = \Nette\Utils\Strings::webalize($name);
+        $componentName = strtr($componentName, '-', '_');
+        $column = new CheckboxColumn($this['columns'], $componentName);
         $column->setColumnName($name);
         $column->setLabel($label);
         $this->setOptions($column, $options);
