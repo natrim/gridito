@@ -3,6 +3,7 @@
 namespace Gridito;
 
 use Nette\NotImplementedException;
+use Nette\Utils\Html;
 
 class CheckboxColumn extends Column
 {
