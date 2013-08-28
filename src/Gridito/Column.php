@@ -1,8 +1,8 @@
 <?php
 
 namespace Gridito;
-use Nette\Utils\Strings;
 use Nette\Utils\Html;
+use Nette\Utils\Strings;
 
 /**
  * Grid column
@@ -74,23 +74,33 @@ class Column extends \Nette\Application\UI\Control
     /** @var string */
     private $columnName;
 
-
+    /**
+     * Sets cell class callback or class
+     * @param $class
+     * @return $this
+     */
     public function setCellClass($class)
     {
         $this->cellClass = $class;
         return $this;
     }
 
-
+    /**
+     * Gets cell class
+     * @param $iterator
+     * @param $row
+     * @return string
+     */
     public function getCellClass($iterator, $row)
     {
+        $class = '';
         if (is_callable($this->cellClass)) {
-            return call_user_func($this->cellClass, $iterator, $row);
+            $class = (string)call_user_func($this->cellClass, $iterator, $row);
         } elseif (is_string($this->cellClass)) {
-            return $this->cellClass;
-        } else {
-            return null;
+            $class = $this->cellClass;
         }
+
+        return ($class ? ' ' : '') . 'gridito-cell';
     }
 
 
@@ -358,8 +368,8 @@ class Column extends \Nette\Application\UI\Control
             $href = str_replace('@', $this->spamProtection, $email);
             $text = str_replace('@',
                 '@<span style="display:none;">'
-                    . $this->spamProtection
-                    . '</span>',
+                . $this->spamProtection
+                . '</span>',
                 htmlspecialchars($email, ENT_QUOTES)
             );
         }

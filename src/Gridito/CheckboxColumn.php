@@ -82,10 +82,15 @@ class CheckboxColumn extends Column
         echo $column;
     }
 
+    /**
+     * Gets cell class
+     * @param $iterator
+     * @param $row
+     * @return string
+     */
     public function getCellClass($iterator, $row)
     {
-        $ret = (string)parent::getCellClass($iterator, $row);
-        return ($ret ? ' ' : '') . 'gridito-checkboxcell';
+        return str_replace('gridito-cell', 'gridito-checkboxcell', parent::getCellClass($iterator, $row));
     }
 
     /**
