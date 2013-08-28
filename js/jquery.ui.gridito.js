@@ -46,7 +46,7 @@
 
                 el.after($("<label />").attr({ for: el.attr("id") }));
 
-                el.button({ text: false, disabled: el.attr("disabled") });
+                el.button({ text: false, disabled: el[0].disabled });
 
                 el.click(function (e) {
                     $(this).button("option", {

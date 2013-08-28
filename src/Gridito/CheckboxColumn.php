@@ -27,6 +27,35 @@ class CheckboxColumn extends Column
     }
 
     /**
+     * Get the type of cell
+     * @return string type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set editable
+     * @param bool editable
+     * @return Column
+     */
+    public function setEditable($editable = TRUE)
+    {
+        $this->editable = $editable;
+        return $this;
+    }
+
+    /**
+     * Is editable?
+     * @return bool
+     */
+    public function isEditable()
+    {
+        return $this->editable;
+    }
+
+    /**
      * Set the type of cell
      * @param string type
      * @throw \InvalidArgumentException
@@ -74,10 +103,9 @@ class CheckboxColumn extends Column
         $value = $this->getGrid()->getModel()->getUniqueId($record);
 
         $column = Html::el('input', array('type' => 'checkbox', 'id' => $this->columnName . $value, 'name' => $this->columnName . '[]', 'value' => (string)$value));
-        //$column->class[] = 'editable';
 
         if (!$this->editable) {
-            $column->disabled('disabled');
+            $column->disabled = 'disabled';
         }
         echo $column;
     }
