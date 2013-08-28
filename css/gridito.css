@@ -74,6 +74,7 @@ div.gridito-flash .ui-icon, div.gridito-flash .gridito-table th .gridito-sorting
 
 .gridito-checkboxcell {
     text-align: center;
+    width: 32px;
 }
 
 .gridito-checkboxcell input+label {
