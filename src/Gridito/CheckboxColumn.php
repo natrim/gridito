@@ -12,6 +12,9 @@ class CheckboxColumn extends Column
     /** @var string */
     private $type = self::RENDER_CHECKBOX;
 
+    /** @var bool */
+    private $editable = TRUE;
+
     /**
      * Set cell renderer
      * @param callback cell renderer
@@ -70,13 +73,19 @@ class CheckboxColumn extends Column
     {
         $value = $this->getGrid()->getModel()->getUniqueId($record);
 
-        $column = Html::el('input', array('type' => 'checkbox', 'name' => $this->columnName . '[]', 'value' => (string)$value));
+        $column = Html::el('input', array('type' => 'checkbox', 'id' => $this->columnName . $value, 'name' => $this->columnName . '[]', 'value' => (string)$value));
         //$column->class[] = 'editable';
 
         if (!$this->editable) {
             $column->disabled('disabled');
         }
         echo $column;
+    }
+
+    public function getCellClass($iterator, $row)
+    {
+        $ret = (string)parent::getCellClass($iterator, $row);
+        return ($ret ? ' ' : '') . 'gridito-checkboxcell';
     }
 
     /**

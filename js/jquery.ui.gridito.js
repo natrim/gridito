@@ -40,6 +40,23 @@
                 }
             });
 
+            //checkbox column checboxes styling
+            this.table.find('.gridito-checkboxcell input').each(function () {
+                var el = $(this);
+
+                el.after($("<label />").attr({ for: el.attr("id") }));
+
+                el.button({ text: false });
+
+                el.click(function (e) {
+                    $(this).button("option", {
+                        icons: {
+                            primary: $(this)[0].checked ? "ui-icon-check" : ""
+                        }
+                    });
+                });
+            });
+
             // buttons
             this.element.find("a.gridito-button").each(function () {
                 var el = $(this);
