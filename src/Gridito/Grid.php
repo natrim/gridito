@@ -73,6 +73,8 @@ class Grid extends \Nette\Application\UI\Control
     /** @var int|string session timeout (default: until is browser closed) */
     private $timeout = 0;
 
+    private $emptyResultText = '';
+
     /**
      * Constructor
      * @param \Nette\Http\Session $session
@@ -547,6 +549,8 @@ class Grid extends \Nette\Application\UI\Control
         //for default check
         $this->template->defaultSorting = (array)$this->defaultSorting;
 
+        $this->template->emptyResultText = $this->emptyResultText;
+
         $this->template->render();
     }
 
@@ -766,5 +770,23 @@ class Grid extends \Nette\Application\UI\Control
     public function getMultisort()
     {
         return $this->multisort_enabled;
+    }
+
+    /**
+     * @param string $emptyResultText
+     * @return Grid
+     */
+    public function setEmptyResultText($emptyResultText)
+    {
+        $this->emptyResultText = (string)$emptyResultText;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmptyResultText()
+    {
+        return $this->emptyResultText;
     }
 }
