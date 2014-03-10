@@ -77,7 +77,7 @@ div.gridito-flash .ui-icon, div.gridito-flash .gridito-table th .gridito-sorting
     width: 32px;
 }
 
-.gridito-checkboxcell input+label {
+.gridito-checkboxcell input + label {
     margin: .5em;
     width: 16px;
     height: 16px;

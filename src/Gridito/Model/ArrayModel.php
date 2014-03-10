@@ -105,7 +105,7 @@ class ArrayModel extends AbstractModel
             $sortParams[] = ((is_string($sortType) && strncasecmp($sortType, 'd', 1)) || $sortType > 0 ? SORT_ASC : SORT_DESC);
         }
 
-        $sortParams[] = &$data;
+        $sortParams[] = & $data;
         call_user_func_array('array_multisort', $sortParams);
 
         //clean

@@ -1,6 +1,7 @@
 <?php
 
 namespace Gridito;
+
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
 
@@ -340,7 +341,7 @@ class Column extends \Nette\Application\UI\Control
 
     /**
      * Render the text, takes care of length
-     * @param string $text     text to render
+     * @param string $text text to render
      * @param int $maxlen maximum length of text
      */
     public function renderText($text, $maxlen)
@@ -355,7 +356,7 @@ class Column extends \Nette\Application\UI\Control
 
     /**
      * Render the email address, takes care of length
-     * @param string $email  email address
+     * @param string $email email address
      * @param int $maxlen maximum length of text
      * @return mixed
      */
